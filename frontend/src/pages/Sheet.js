@@ -243,7 +243,7 @@ const Sheet = () => {
       {/* Create/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4" onClick={(e) => e.target === e.currentTarget && closeModal()}>
-          <div className="bg-white w-full sm:max-w-2xl sm:rounded-2xl rounded-t-2xl max-h-[95vh] flex flex-col shadow-2xl animate-slide-in-up">
+          <div className="bg-white w-full sm:max-w-2xl sm:rounded-2xl rounded-t-3xl max-h-[80vh] sm:max-h-[90vh] flex flex-col shadow-2xl animate-slide-in-up mb-0 sm:mb-0">
             
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-slate-200 shrink-0 bg-gradient-to-r from-primary-50 to-blue-50">
@@ -287,7 +287,7 @@ const Sheet = () => {
             </div>
 
             {/* Body - Scrollable Content */}
-            <div className="flex-1 overflow-y-auto overscroll-contain">
+            <div className="flex-1 overflow-y-auto overscroll-contain min-h-0">
               <div className="p-4 space-y-3">
                 
                 {/* Google Import */}
@@ -442,22 +442,22 @@ const Sheet = () => {
               </div>
             </div>
 
-            {/* Footer - Always Visible */}
-            <div className="p-3 border-t border-slate-200 bg-slate-50 shrink-0">
+            {/* Footer - Sticky and Always Visible */}
+            <div className="sticky bottom-0 p-3 border-t-2 border-slate-300 bg-white shrink-0 shadow-[0_-4px_12px_rgba(0,0,0,0.1)]">
               {!showSavePanel ? (
                 <button 
                   onClick={activeTab === 'google' ? handleFetchFromGoogle : handleUploadFiles} 
-                  className="w-full h-11 flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold text-sm rounded-xl shadow-md active:scale-[0.98] transition-all"
+                  className="w-full h-12 flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold text-sm rounded-xl shadow-lg active:scale-[0.98] transition-all"
                 >
                   {activeTab === 'google' ? (
                     <>
-                      <Cloud size={18} />
-                      جلب البيانات من Google
+                      <Cloud size={20} />
+                      <span>جلب البيانات من Google</span>
                     </>
                   ) : (
                     <>
-                      <Upload size={18} />
-                      تحميل وقراءة الملفات
+                      <Upload size={20} />
+                      <span>تحميل وقراءة الملفات</span>
                     </>
                   )}
                 </button>
@@ -465,16 +465,16 @@ const Sheet = () => {
                 <div className="flex gap-2">
                   <button 
                     onClick={closeModal} 
-                    className="flex-1 h-11 flex items-center justify-center bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-sm rounded-xl transition-colors"
+                    className="flex-1 h-12 flex items-center justify-center bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm rounded-xl transition-colors"
                   >
                     إلغاء
                   </button>
                   <button 
                     onClick={handleSaveCycle} 
-                    className="flex-1 h-11 flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold text-sm rounded-xl shadow-md active:scale-[0.98] transition-all"
+                    className="flex-1 h-12 flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-bold text-sm rounded-xl shadow-lg active:scale-[0.98] transition-all"
                   >
                     <FileSpreadsheet size={18} />
-                    حفظ الدورة
+                    <span>حفظ الدورة</span>
                   </button>
                 </div>
               )}
