@@ -13,6 +13,20 @@ export const useAuth = () => {
   return context;
 };
 
+// Create axios instance with auth interceptor
+const api = axios.create({
+  baseURL: API_URL
+});
+
+// Add token to requests
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('access_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -22,12 +36,19 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAuth = async () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await axios.get(`${API_URL}/api/auth/me`, {
-        withCredentials: true
-      });
+      const response = await api.get('/api/auth/me');
       setUser(response.data);
     } catch (error) {
+      // Token invalid, clear it
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
       setUser(null);
     } finally {
       setLoading(false);
@@ -35,29 +56,39 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (email, password) => {
-    const response = await axios.post(`${API_URL}/api/auth/login`, 
-      { email, password },
-      { withCredentials: true }
-    );
-    setUser(response.data);
-    return response.data;
+    const response = await axios.post(`${API_URL}/api/auth/login`, { email, password });
+    const { access_token, refresh_token, ...userData } = response.data;
+    
+    // Store tokens
+    localStorage.setItem('access_token', access_token);
+    localStorage.setItem('refresh_token', refresh_token);
+    
+    setUser(userData);
+    return userData;
   };
 
   const register = async (email, password, name) => {
-    const response = await axios.post(`${API_URL}/api/auth/register`,
-      { email, password, name },
-      { withCredentials: true }
-    );
-    setUser(response.data);
-    return response.data;
+    const response = await axios.post(`${API_URL}/api/auth/register`, { email, password, name });
+    const { access_token, refresh_token, ...userData } = response.data;
+    
+    // Store tokens
+    localStorage.setItem('access_token', access_token);
+    localStorage.setItem('refresh_token', refresh_token);
+    
+    setUser(userData);
+    return userData;
   };
 
   const logout = async () => {
     try {
-      await axios.post(`${API_URL}/api/auth/logout`, {}, { withCredentials: true });
+      await api.post('/api/auth/logout');
     } catch (error) {
       console.error('Logout error:', error);
     }
+    
+    // Clear tokens
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
     setUser(null);
   };
 

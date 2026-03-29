@@ -27,9 +27,18 @@ export const DataProvider = ({ children }) => {
   const [dashboardSummary, setDashboardSummary] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // Create axios instance with auth header
   const api = axios.create({
-    baseURL: API_URL,
-    withCredentials: true
+    baseURL: API_URL
+  });
+
+  // Add token to all requests
+  api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
   });
 
   const fetchCycles = useCallback(async () => {

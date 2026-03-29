@@ -328,10 +328,14 @@ async def register(user: UserRegister, response: Response):
     access_token = create_access_token(user_id, email)
     refresh_token = create_refresh_token(user_id)
     
-    response.set_cookie(key="access_token", value=access_token, httponly=True, secure=False, samesite="lax", max_age=3600, path="/")
-    response.set_cookie(key="refresh_token", value=refresh_token, httponly=True, secure=False, samesite="lax", max_age=604800, path="/")
-    
-    return {"_id": user_id, "email": email, "name": user.name, "role": "user"}
+    return {
+        "_id": user_id, 
+        "email": email, 
+        "name": user.name, 
+        "role": "user",
+        "access_token": access_token,
+        "refresh_token": refresh_token
+    }
 
 @app.post("/api/auth/login")
 async def login(user: UserLogin, request: Request, response: Response):
@@ -356,10 +360,14 @@ async def login(user: UserLogin, request: Request, response: Response):
     access_token = create_access_token(user_id, email)
     refresh_token = create_refresh_token(user_id)
     
-    response.set_cookie(key="access_token", value=access_token, httponly=True, secure=False, samesite="lax", max_age=3600, path="/")
-    response.set_cookie(key="refresh_token", value=refresh_token, httponly=True, secure=False, samesite="lax", max_age=604800, path="/")
-    
-    return {"_id": user_id, "email": email, "name": db_user.get("name", ""), "role": db_user.get("role", "user")}
+    return {
+        "_id": user_id, 
+        "email": email, 
+        "name": db_user.get("name", ""), 
+        "role": db_user.get("role", "user"),
+        "access_token": access_token,
+        "refresh_token": refresh_token
+    }
 
 @app.post("/api/auth/logout")
 async def logout(response: Response):
