@@ -230,7 +230,7 @@ const Sheet = () => {
       {showModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center">
           
-          <div className="bg-white w-full sm:max-w-2xl sm:mx-4 sm:rounded-2xl rounded-t-3xl h-[90vh] sm:max-h-[90vh] flex flex-col shadow-2xl animate-slide-in-up">
+          <div className="bg-white w-full sm:max-w-2xl sm:mx-4 sm:rounded-2xl rounded-t-3xl h-[80vh] sm:max-h-[90vh] flex flex-col shadow-2xl animate-slide-in-up">
             
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-primary-600 to-primary-700 shrink-0 sm:rounded-t-2xl rounded-t-3xl">
@@ -274,7 +274,7 @@ const Sheet = () => {
             </div>
 
             {/* Body - Scrollable */}
-            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-4 py-3 space-y-3">
+            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-2 space-y-2.5">
               
               {/* Google Tab */}
               {activeTab === 'google' && (
@@ -288,8 +288,8 @@ const Sheet = () => {
                   </div>
                   
                   {/* Management Card */}
-                  <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-3.5 shadow-sm">
-                    <div className="flex items-center gap-2 mb-3">
+                  <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-2.5 shadow-sm">
+                    <div className="flex items-center gap-2 mb-2">
                       <div className="w-6 h-6 rounded-lg bg-amber-200 flex items-center justify-center">
                         <FileSpreadsheet size={14} className="text-amber-700" />
                       </div>
@@ -320,8 +320,8 @@ const Sheet = () => {
                   </div>
 
                   {/* Agent Card */}
-                  <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-300 rounded-xl p-3.5 shadow-sm">
-                    <div className="flex items-center gap-2 mb-3">
+                  <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-300 rounded-xl p-2.5 shadow-sm">
+                    <div className="flex items-center gap-2 mb-2">
                       <div className="w-6 h-6 rounded-lg bg-blue-200 flex items-center justify-center">
                         <FileSpreadsheet size={14} className="text-blue-700" />
                       </div>
@@ -357,8 +357,8 @@ const Sheet = () => {
               {activeTab === 'upload' && (
                 <>
                   {/* Management File */}
-                  <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-3.5 shadow-sm">
-                    <div className="flex items-center gap-2 mb-3">
+                  <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300 rounded-xl p-2.5 shadow-sm">
+                    <div className="flex items-center gap-2 mb-2">
                       <div className="w-6 h-6 rounded-lg bg-amber-200 flex items-center justify-center">
                         <File size={14} className="text-amber-700" />
                       </div>
@@ -372,8 +372,8 @@ const Sheet = () => {
                   </div>
 
                   {/* Agent File */}
-                  <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-300 rounded-xl p-3.5 shadow-sm">
-                    <div className="flex items-center gap-2 mb-3">
+                  <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-300 rounded-xl p-2.5 shadow-sm">
+                    <div className="flex items-center gap-2 mb-2">
                       <div className="w-6 h-6 rounded-lg bg-blue-200 flex items-center justify-center">
                         <File size={14} className="text-blue-700" />
                       </div>
@@ -435,37 +435,37 @@ const Sheet = () => {
             </div>
 
             {/* Footer - Fixed Button */}
-            <div className="bg-white border-t-4 border-emerald-400 px-4 py-4 shrink-0">
+            <div className="bg-white border-t-4 border-emerald-400 px-3 py-2.5 shrink-0">
               {!showSavePanel ? (
                 <button 
                   onClick={activeTab === 'google' ? handleFetchFromGoogle : handleUploadFiles} 
-                  className="w-full h-14 flex items-center justify-center gap-2.5 bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-500 hover:from-emerald-600 hover:to-emerald-600 text-white font-black text-base rounded-xl shadow-2xl active:scale-[0.97] transition-all border-2 border-emerald-700"
+                  className="w-full h-12 flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-500 hover:from-emerald-600 hover:to-emerald-600 text-white font-black text-sm rounded-xl shadow-2xl active:scale-[0.97] transition-all border-2 border-emerald-700"
                 >
                   {activeTab === 'google' ? (
                     <>
-                      <Cloud size={22} strokeWidth={2.5} />
+                      <Cloud size={20} strokeWidth={2.5} />
                       <span>جلب البيانات من Google</span>
                     </>
                   ) : (
                     <>
-                      <Upload size={22} strokeWidth={2.5} />
+                      <Upload size={20} strokeWidth={2.5} />
                       <span>تحميل الملفات</span>
                     </>
                   )}
                 </button>
               ) : (
-                <div className="flex gap-3">
+                <div className="flex gap-2">
                   <button 
                     onClick={closeModal} 
-                    className="flex-1 h-14 flex items-center justify-center bg-slate-300 hover:bg-slate-400 text-slate-800 font-black text-sm rounded-xl transition-all border-2 border-slate-400"
+                    className="flex-1 h-12 flex items-center justify-center bg-slate-300 hover:bg-slate-400 text-slate-800 font-black text-sm rounded-xl transition-all border-2 border-slate-400"
                   >
                     إلغاء
                   </button>
                   <button 
                     onClick={handleSaveCycle} 
-                    className="flex-1 h-14 flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 via-primary-600 to-primary-500 hover:from-primary-600 hover:to-primary-600 text-white font-black text-sm rounded-xl shadow-2xl active:scale-[0.97] transition-all border-2 border-primary-700"
+                    className="flex-1 h-12 flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 via-primary-600 to-primary-500 hover:from-primary-600 hover:to-primary-600 text-white font-black text-sm rounded-xl shadow-2xl active:scale-[0.97] transition-all border-2 border-primary-700"
                   >
-                    <FileSpreadsheet size={20} strokeWidth={2.5} />
+                    <FileSpreadsheet size={18} strokeWidth={2.5} />
                     <span>حفظ الدورة</span>
                   </button>
                 </div>
