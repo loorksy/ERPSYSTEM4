@@ -280,14 +280,14 @@ const Layout = () => {
       </main>
 
       {/* FAB - Quick Action Button */}
-      <div className="fixed bottom-20 lg:bottom-8 left-1/2 -translate-x-1/2 lg:left-auto lg:right-8 lg:translate-x-0 z-30">
+      <div className="fixed bottom-20 lg:bottom-8 left-1/2 -translate-x-1/2 lg:left-auto lg:right-80 lg:translate-x-0 z-[60]">
         <AnimatePresence>
           {fabOpen && (
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className="absolute bottom-16 left-1/2 -translate-x-1/2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 p-4"
+              className="absolute bottom-16 left-1/2 -translate-x-1/2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 z-[61]"
             >
               <div className="grid grid-cols-2 gap-4">
                 {/* صادر */}
