@@ -230,7 +230,7 @@ const Sheet = () => {
       {showModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center">
           
-          <div className="bg-white w-full sm:max-w-2xl sm:mx-4 sm:rounded-2xl rounded-t-3xl max-h-screen sm:max-h-[90vh] flex flex-col shadow-2xl animate-slide-in-up">
+          <div className="bg-white w-full sm:max-w-2xl sm:mx-4 sm:rounded-2xl rounded-t-3xl h-[90vh] sm:max-h-[90vh] flex flex-col shadow-2xl animate-slide-in-up">
             
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-primary-600 to-primary-700 shrink-0 sm:rounded-t-2xl rounded-t-3xl">
