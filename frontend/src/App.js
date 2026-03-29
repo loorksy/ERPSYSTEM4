@@ -21,7 +21,11 @@ import Payroll from './pages/Payroll';
 import MemberDirectory from './pages/MemberDirectory';
 import MemberAdjustments from './pages/MemberAdjustments';
 import Messages from './pages/Messages';
-import { MainAgency, PayablesUs, ReceivablesToUs, PaymentDue, FxSpread, ProfitSources, AdminBrokerage } from './pages/Placeholder';
+import MainAgency from './pages/MainAgency';
+import FxSpread from './pages/FxSpread';
+import PaymentDue from './pages/PaymentDue';
+import ProfitSources from './pages/ProfitSources';
+import { PayablesUs, ReceivablesToUs, AdminBrokerage } from './pages/DebtPages';
 
 // Components
 import Layout from './components/Layout';
