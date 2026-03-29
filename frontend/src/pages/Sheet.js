@@ -290,34 +290,34 @@ const Sheet = () => {
               {/* Google Import Panel */}
               {activeTab === 'google' && (
                 <div className="space-y-5">
-                  <p className="text-sm text-slate-600 bg-blue-50 border border-blue-100 rounded-lg p-3">
+                  <p className="text-xs text-slate-600 bg-blue-50 border border-blue-100 rounded-lg p-2.5">
                     💡 اختر من جداول البيانات في حسابك — يتم جلب القائمة تلقائياً من Google
                   </p>
                   
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="space-y-4">
                     {/* Management */}
-                    <div className="card p-4 bg-amber-50 border-amber-200">
-                      <h4 className="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
-                        <span className="text-lg">🏢</span>
+                    <div className="card p-3 bg-amber-50 border-amber-200">
+                      <h4 className="font-semibold text-slate-800 text-xs mb-2 flex items-center gap-1.5">
+                        <span>🏢</span>
                         الإدارة
                       </h4>
-                      <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <label className="label text-xs">جدول الإدارة</label>
+                          <label className="block text-[10px] font-medium text-slate-600 mb-1">جدول الإدارة</label>
                           <select
                             value={formData.mgmtSpreadsheetId}
                             onChange={(e) => setFormData({ ...formData, mgmtSpreadsheetId: e.target.value })}
-                            className="input text-sm"
+                            className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded-lg bg-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
                           >
                             <option value="">— جاري التحميل... —</option>
                           </select>
                         </div>
                         <div>
-                          <label className="label text-xs">ورقة الإدارة</label>
+                          <label className="block text-[10px] font-medium text-slate-600 mb-1">ورقة الإدارة</label>
                           <select
                             value={formData.mgmtSheetName}
                             onChange={(e) => setFormData({ ...formData, mgmtSheetName: e.target.value })}
-                            className="input text-sm"
+                            className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded-lg bg-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
                           >
                             <option value="">أول ورقة تلقائياً</option>
                           </select>
@@ -326,28 +326,28 @@ const Sheet = () => {
                     </div>
 
                     {/* Agent */}
-                    <div className="card p-4 bg-blue-50 border-blue-200">
-                      <h4 className="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
-                        <span className="text-lg">👔</span>
+                    <div className="card p-3 bg-blue-50 border-blue-200">
+                      <h4 className="font-semibold text-slate-800 text-xs mb-2 flex items-center gap-1.5">
+                        <span>👔</span>
                         الوكيل
                       </h4>
-                      <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <label className="label text-xs">جدول الوكيل</label>
+                          <label className="block text-[10px] font-medium text-slate-600 mb-1">جدول الوكيل</label>
                           <select
                             value={formData.agentSpreadsheetId}
                             onChange={(e) => setFormData({ ...formData, agentSpreadsheetId: e.target.value })}
-                            className="input text-sm"
+                            className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded-lg bg-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
                           >
                             <option value="">— جاري التحميل... —</option>
                           </select>
                         </div>
                         <div>
-                          <label className="label text-xs">ورقة الوكيل</label>
+                          <label className="block text-[10px] font-medium text-slate-600 mb-1">ورقة الوكيل</label>
                           <select
                             value={formData.agentSheetName}
                             onChange={(e) => setFormData({ ...formData, agentSheetName: e.target.value })}
-                            className="input text-sm"
+                            className="w-full px-2 py-1.5 text-xs border border-slate-300 rounded-lg bg-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
                           >
                             <option value="">أول ورقة تلقائياً</option>
                           </select>
@@ -360,22 +360,28 @@ const Sheet = () => {
 
               {/* Upload Panel */}
               {activeTab === 'upload' && (
-                <div className="space-y-5">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <div className="card p-4 bg-amber-50 border-amber-200">
-                      <label className="label mb-3 flex items-center gap-2">
-                        <span className="text-lg">🏢</span>
-                        ملف الإدارة
-                      </label>
-                      <input type="file" accept=".xlsx,.xls,.csv" className="input text-sm file:btn file:btn-secondary file:ml-2" />
-                    </div>
-                    <div className="card p-4 bg-blue-50 border-blue-200">
-                      <label className="label mb-3 flex items-center gap-2">
-                        <span className="text-lg">👔</span>
-                        ملف الوكيل
-                      </label>
-                      <input type="file" accept=".xlsx,.xls,.csv" className="input text-sm file:btn file:btn-secondary file:ml-2" />
-                    </div>
+                <div className="space-y-4">
+                  <div className="card p-3 bg-amber-50 border-amber-200">
+                    <h4 className="font-semibold text-slate-800 text-xs mb-2 flex items-center gap-1.5">
+                      <span>🏢</span>
+                      ملف الإدارة
+                    </h4>
+                    <input 
+                      type="file" 
+                      accept=".xlsx,.xls,.csv" 
+                      className="w-full text-xs border border-slate-300 rounded-lg bg-white file:mr-2 file:py-1.5 file:px-3 file:border-0 file:bg-slate-100 file:text-slate-700 file:rounded-md file:text-xs file:font-medium hover:file:bg-slate-200" 
+                    />
+                  </div>
+                  <div className="card p-3 bg-blue-50 border-blue-200">
+                    <h4 className="font-semibold text-slate-800 text-xs mb-2 flex items-center gap-1.5">
+                      <span>👔</span>
+                      ملف الوكيل
+                    </h4>
+                    <input 
+                      type="file" 
+                      accept=".xlsx,.xls,.csv" 
+                      className="w-full text-xs border border-slate-300 rounded-lg bg-white file:mr-2 file:py-1.5 file:px-3 file:border-0 file:bg-slate-100 file:text-slate-700 file:rounded-md file:text-xs file:font-medium hover:file:bg-slate-200" 
+                    />
                   </div>
                 </div>
               )}
