@@ -260,7 +260,7 @@ const Sheet = () => {
             </div>
 
             {/* Modal Body - Scrollable */}
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 pb-20 sm:pb-6">
               {/* Tabs */}
               <div className="flex gap-2 p-1 bg-slate-100 rounded-lg mb-6">
                 <button
@@ -355,11 +355,6 @@ const Sheet = () => {
                       </div>
                     </div>
                   </div>
-
-                  <button onClick={handleFetchFromGoogle} className="btn btn-success w-full">
-                    <Cloud size={18} />
-                    جلب البيانات من Google
-                  </button>
                 </div>
               )}
 
@@ -382,10 +377,6 @@ const Sheet = () => {
                       <input type="file" accept=".xlsx,.xls,.csv" className="input text-sm file:btn file:btn-secondary file:ml-2" />
                     </div>
                   </div>
-                  <button onClick={handleUploadFiles} className="btn btn-primary w-full">
-                    <Upload size={18} />
-                    تحميل وقراءة الملفات
-                  </button>
                 </div>
               )}
 
@@ -437,9 +428,26 @@ const Sheet = () => {
               )}
             </div>
 
-            {/* Modal Footer */}
-            {showSavePanel && (
-              <div className="p-4 sm:p-6 border-t border-slate-200 bg-slate-50 shrink-0">
+            {/* Modal Footer - Always visible */}
+            <div className="p-4 sm:p-6 border-t border-slate-200 bg-slate-50 shrink-0">
+              {!showSavePanel ? (
+                <button 
+                  onClick={activeTab === 'google' ? handleFetchFromGoogle : handleUploadFiles} 
+                  className="btn btn-success w-full"
+                >
+                  {activeTab === 'google' ? (
+                    <>
+                      <Cloud size={18} />
+                      جلب البيانات من Google
+                    </>
+                  ) : (
+                    <>
+                      <Upload size={18} />
+                      تحميل وقراءة الملفات
+                    </>
+                  )}
+                </button>
+              ) : (
                 <div className="flex gap-3">
                   <button onClick={closeModal} className="btn btn-secondary flex-1">
                     إلغاء
@@ -449,8 +457,8 @@ const Sheet = () => {
                     حفظ الدورة
                   </button>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       )}
