@@ -365,14 +365,13 @@ const Layout = () => {
       {/* Mobile FAB Menu Overlay */}
       <AnimatePresence>
         {fabOpen && (
-          <div className="lg:hidden fixed inset-0 z-[70]">
+          <div className="lg:hidden fixed inset-0 z-[70] flex items-center justify-center" onClick={() => setFabOpen(false)}>
             {/* Overlay */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="absolute inset-0 bg-black/40"
-              onClick={() => setFabOpen(false)}
             />
             
             {/* Centered Menu */}
@@ -380,7 +379,8 @@ const Layout = () => {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white rounded-2xl shadow-2xl p-5"
+              className="relative z-[71] w-[90%] max-w-sm bg-white rounded-2xl shadow-2xl p-5"
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="grid grid-cols-2 gap-4">
                 {/* صادر */}
