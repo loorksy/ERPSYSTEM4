@@ -281,15 +281,16 @@ const Layout = () => {
         </div>
       </main>
 
-      {/* FAB - Quick Action Button */}
-      <div className="fixed bottom-20 lg:bottom-8 left-1/2 -translate-x-1/2 lg:left-auto lg:right-80 lg:translate-x-0 z-[60]">
+      {/* FAB - Quick Action Button - Desktop Only */}
+      {/* Desktop: Left side */}
+      <div className="hidden lg:block fixed bottom-8 left-8 z-[60]">
         <AnimatePresence>
           {fabOpen && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              className="absolute bottom-16 left-1/2 -translate-x-1/2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 z-[61]"
+              initial={{ opacity: 0, scale: 0.8, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 20 }}
+              className="absolute bottom-16 left-0 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 z-[61]"
             >
               <div className="grid grid-cols-2 gap-4">
                 {/* صادر */}
@@ -361,12 +362,84 @@ const Layout = () => {
         </motion.button>
       </div>
 
+      {/* Mobile FAB Menu Overlay */}
+      <AnimatePresence>
+        {fabOpen && (
+          <div className="lg:hidden fixed inset-0 z-[70]">
+            {/* Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/40"
+              onClick={() => setFabOpen(false)}
+            />
+            
+            {/* Centered Menu */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-sm bg-white rounded-2xl shadow-2xl p-5"
+            >
+              <div className="grid grid-cols-2 gap-4">
+                {/* صادر */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3 text-red-600">
+                    <ArrowUpCircle className="w-5 h-5" />
+                    <span className="font-semibold text-sm">صادر</span>
+                  </div>
+                  <div className="space-y-2">
+                    {fabOutActions.map((action, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          setFabOpen(false);
+                          action.action();
+                        }}
+                        className="w-full flex items-center gap-2 p-3 rounded-lg text-sm text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors"
+                      >
+                        <action.icon className="w-5 h-5" />
+                        {action.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* وارد */}
+                <div>
+                  <div className="flex items-center gap-2 mb-3 text-emerald-600">
+                    <ArrowDownCircle className="w-5 h-5" />
+                    <span className="font-semibold text-sm">وارد</span>
+                  </div>
+                  <div className="space-y-2">
+                    {fabInActions.map((action, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          setFabOpen(false);
+                          action.action();
+                        }}
+                        className="w-full flex items-center gap-2 p-3 rounded-lg text-sm text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
+                      >
+                        <action.icon className="w-5 h-5" />
+                        {action.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* Mobile Bottom Nav */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-slate-200 z-30">
-        <div className="flex items-center justify-around h-full">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-slate-200 z-[65]">
+        <div className="flex items-center justify-around h-full px-2">
           <Link
             to="/dashboard"
-            className={`flex flex-col items-center justify-center w-16 h-full ${
+            className={`flex flex-col items-center justify-center flex-1 h-full ${
               isActive('/dashboard') ? 'text-primary-600' : 'text-slate-400'
             }`}
           >
@@ -374,18 +447,38 @@ const Layout = () => {
             <span className="text-xs mt-1">الرئيسية</span>
           </Link>
           <Link
-            to="/sheet"
-            className={`flex flex-col items-center justify-center w-16 h-full ${
-              isActive('/sheet') ? 'text-primary-600' : 'text-slate-400'
+            to="/analytics"
+            className={`flex flex-col items-center justify-center flex-1 h-full ${
+              isActive('/analytics') ? 'text-primary-600' : 'text-slate-400'
             }`}
           >
-            <FileSpreadsheet className="w-5 h-5" />
-            <span className="text-xs mt-1">Sheet</span>
+            <BarChart3 className="w-5 h-5" />
+            <span className="text-xs mt-1">التحليلات</span>
           </Link>
-          <div className="w-16" /> {/* Spacer for FAB */}
+          
+          {/* Center FAB Button in nav */}
+          <div className="flex items-center justify-center flex-1 h-full -mt-6">
+            <button
+              onClick={() => setFabOpen(!fabOpen)}
+              className={`w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-colors ${
+                fabOpen 
+                  ? 'bg-slate-800 text-white' 
+                  : 'bg-gradient-to-br from-primary-500 to-primary-700 text-white'
+              }`}
+              data-testid="mobile-fab-button"
+            >
+              <motion.div
+                animate={{ rotate: fabOpen ? 45 : 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Plus className="w-6 h-6" />
+              </motion.div>
+            </button>
+          </div>
+          
           <Link
             to="/clients"
-            className={`flex flex-col items-center justify-center w-16 h-full ${
+            className={`flex flex-col items-center justify-center flex-1 h-full ${
               isActive('/clients') ? 'text-primary-600' : 'text-slate-400'
             }`}
           >
@@ -394,7 +487,7 @@ const Layout = () => {
           </Link>
           <Link
             to="/search"
-            className={`flex flex-col items-center justify-center w-16 h-full ${
+            className={`flex flex-col items-center justify-center flex-1 h-full ${
               isActive('/search') ? 'text-primary-600' : 'text-slate-400'
             }`}
           >

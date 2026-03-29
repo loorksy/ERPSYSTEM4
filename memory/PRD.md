@@ -1,103 +1,46 @@
-# LorkERP - نظام المحاسبة المتكامل
+# LorkERP - Professional Arabic Accounting System
 
-## المواصفات الأولية
-نظام محاسبي احترافي متكامل باللغة العربية مع دعم RTL.
+## Original Problem Statement
+A professional, comprehensive Arabic RTL accounting system (LorkERP) with a full financial flow map, Dashboard, Analytics, and multiple entities (Clients, Funds, Shipping, Expenses, etc.). Future integration with Google Sheets. To be deployed on a VPS.
 
-## التقنيات المستخدمة
-- **Backend**: Python FastAPI
-- **Frontend**: React.js + Tailwind CSS
-- **Database**: MongoDB
-- **Auth**: JWT with bcrypt
+## Tech Stack
+- **Frontend:** React, TailwindCSS, React Router, Recharts, Lucide-React, Framer Motion
+- **Backend:** Python, FastAPI, PyMongo, JWT Auth (python-jose), Passlib
+- **Database:** MongoDB
 
-## المتطلبات الأساسية (Core Requirements)
-- تسجيل الدخول والخروج
-- لوحة تحكم رئيسية مع مؤشرات مالية
-- نظام الدورات المالية
-- إدارة الصناديق المالية
-- إدارة العملاء
-- إدارة الوكالات الفرعية
-- إدارة شركات التحويل
-- نظام الاعتمادات
-- نظام الشحن (شراء/بيع)
-- نظام المصاريف
-- نظام الديون والمستحقات
-- زر الإجراء السريع (FAB)
+## Architecture
+- RTL (Arabic) layout throughout
+- JWT token-based auth stored in localStorage (NOT cookies - preview env limitation)
+- Sidebar navigation on desktop, bottom nav on mobile
 
-## ما تم تنفيذه (Implemented) - 29/03/2026
-- [x] صفحة تسجيل الدخول/التسجيل
-- [x] لوحة التحكم الرئيسية
-- [x] إنشاء وإدارة الدورات المالية
-- [x] إنشاء وإدارة الصناديق المالية (إيداع/سحب)
-- [x] إنشاء وإدارة العملاء (CRUD كامل)
-- [x] إنشاء وإدارة الوكالات الفرعية (مكافأة/خصم شحن)
-- [x] إنشاء وإدارة شركات التحويل (صرف)
-- [x] نظام الاعتمادات (إلينا/منا مع عمولة)
-- [x] نظام الشحن (شراء/بيع مع ملخص)
-- [x] نظام المصاريف (مع تصنيفات)
-- [x] نظام الديون (تسجيل/تسديد)
-- [x] زر الإجراء السريع (FAB)
-- [x] البحث الموحد
-- [x] صفحة الإعدادات
-- [x] واجهة عربية RTL كاملة
+## Completed Features
+- [x] Project structure setup (React + FastAPI + MongoDB)
+- [x] Core RTL Layout (Layout.js) with Sidebar + Bottom Nav
+- [x] JWT Authentication (login, register, logout, me)
+- [x] Dashboard with financial summary cards
+- [x] Analytics page with Recharts (trends, shipping trends)
+- [x] Scaffold pages for all accounting modules
+- [x] FAB/Quick Action button - Desktop: left side, Mobile: centered in bottom nav, Menu: centered overlay
+- [x] Auth migration from cookies to localStorage (fixed preview env issue)
 
-## تم إضافة لوحة التحليلات - 29/03/2026
-- [x] صفحة التحليلات والرسوم البيانية
-  - إحصائيات سريعة (الصناديق، العملاء، الوكالات، إلخ)
-  - بطاقات الملخص المالي (صافي الربح، المصاريف، رصيد الشحن)
-  - رسم بياني لاتجاه الأرباح والمصاريف
-  - رسم دائري لمصادر الربح
-  - رسم بياني للمصاريف حسب التصنيف
-  - رسم بياني لحركة الشحن
-  - ملخص الديون (علينا/لنا)
-  - آخر المعاملات
-  - فلتر الفترة الزمنية (7/30/90 يوم)
+## Data Status
+- **MOCKED:** Most business pages (Clients, Funds, Shipping, Expenses, Debts, etc.) use mock/static data
 
-## تم تفعيل الصفحات المؤجلة - 29/03/2026
-- [x] تدقيق الرواتب (كشف رواتب مع المكافآت والخصومات)
-- [x] بيانات المستخدمين (إضافة موظفين مع الراتب الأساسي)
-- [x] إضافات وخصومات المستخدمين (مكافآت/خصومات)
-- [x] ترتيب الرسائل (إدارة الرسائل الجاهزة)
-- [x] فرق التصريف (تسجيل أرباح العملات)
-- [x] مطلوب دفع (متابعة الدفعات المستحقة)
-- [x] مصادر الربح (تتبع الأرباح من مختلف المصادر)
-- [x] الوكالة الرئيسية (نظرة شاملة)
-- [x] دين علينا (الديون المستحقة علينا)
-- [x] ديين لنا (الديون المستحقة لنا)
-- [x] وساطة إدارية (أرباح الوساطة)
+## Upcoming Tasks (P0-P1)
+- [ ] Implement CRUD for scaffolded pages (Clients, Funds, Shipping, Expenses, Debts, SubAgencies)
+- [ ] Proper MongoDB ObjectId handling in all API responses
 
-## الميزات المؤجلة (Backlog)
-### P0 - أولوية عالية
-- [ ] تكامل Google Sheets
-- [ ] تقارير PDF
+## Future Tasks (P2)
+- [ ] Google Sheets Integration
+- [ ] Advanced reporting & PDF invoice/receipt generation
 
-### P1 - أولوية متوسطة
-- [ ] دعم متعدد العملات
-- [ ] إشعارات البريد الإلكتروني
-- [ ] تطبيق موبايل
+## Key Files
+- `/app/backend/server.py` - All routing, endpoints, JWT logic
+- `/app/frontend/src/components/Layout.js` - Main layout with sidebar, bottom nav, FAB
+- `/app/frontend/src/context/AuthContext.js` - Auth state management
+- `/app/frontend/src/context/DataContext.js` - App data context
+- `/app/frontend/src/pages/` - All page components
 
-## المستخدمون
-- **مدير النظام (Admin)**: صلاحيات كاملة
-- **مستخدم عادي (User)**: صلاحيات محدودة
-
-## بيانات الدخول للاختبار
+## Test Credentials
 - Email: admin@lorkerp.com
 - Password: Admin@123456
-
-## API Endpoints الرئيسية
-- `/api/auth/*` - المصادقة
-- `/api/cycles` - الدورات المالية
-- `/api/funds` - الصناديق
-- `/api/clients` - العملاء
-- `/api/sub-agencies` - الوكالات الفرعية
-- `/api/transfer-companies` - شركات التحويل
-- `/api/approvals` - الاعتمادات
-- `/api/shipping` - الشحن
-- `/api/expenses` - المصاريف
-- `/api/debts` - الديون
-- `/api/dashboard/summary` - ملخص لوحة التحكم
-- `/api/search` - البحث
-
-## المهام التالية
-1. إضافة تكامل Google Sheets عند توفر credentials
-2. إضافة تقارير PDF
-3. تفعيل صفحات الميزات المؤجلة
