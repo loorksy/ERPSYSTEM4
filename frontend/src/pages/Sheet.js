@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileSpreadsheet, Plus, Edit2, Trash2, Calendar, Link, File, X } from 'lucide-react';
+import { FileSpreadsheet, Plus, Edit2, Trash2, Calendar, Link, File, X, Cloud, Upload } from 'lucide-react';
 
 const Sheet = () => {
   const [cycles, setCycles] = useState([]);
@@ -24,7 +24,6 @@ const Sheet = () => {
 
   // Mock data for demonstration
   useEffect(() => {
-    // Simulate loading cycles
     setCycles([
       {
         id: 1,
@@ -93,7 +92,6 @@ const Sheet = () => {
   };
 
   const handleFetchFromGoogle = () => {
-    // Simulate fetching data from Google
     setFormData(prev => ({
       ...prev,
       managementRows: 150,
@@ -103,7 +101,6 @@ const Sheet = () => {
   };
 
   const handleUploadFiles = () => {
-    // Simulate file upload
     setFormData(prev => ({
       ...prev,
       managementRows: 140,
@@ -113,13 +110,11 @@ const Sheet = () => {
   };
 
   const handleSaveCycle = () => {
-    // Here you would call the API to save
     console.log('Saving cycle:', formData);
     closeModal();
   };
 
   const handleDeleteCycle = () => {
-    // Here you would call the API to delete
     console.log('Deleting cycle:', deleteTarget);
     setCycles(cycles.filter(c => c.id !== deleteTarget.id));
     closeDeleteConfirm();
@@ -133,101 +128,109 @@ const Sheet = () => {
     });
   };
 
-  const colors = [
-    'from-sky-500 to-violet-600',
-    'from-emerald-500 to-teal-600',
-    'from-amber-500 to-orange-600',
-    'from-rose-500 to-pink-600',
-    'from-cyan-500 to-blue-600'
+  const gradients = [
+    'from-blue-500 to-cyan-500',
+    'from-emerald-500 to-teal-500',
+    'from-amber-500 to-orange-500',
+    'from-rose-500 to-pink-500',
+    'from-purple-500 to-indigo-500'
   ];
 
   return (
-    <div className="max-w-6xl mx-auto" dir="rtl" data-testid="sheet-page">
+    <div className="space-y-6 animate-fade-in" dir="rtl" data-testid="sheet-page">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-        <div>
-          <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#1e3a5f] flex items-center justify-center">
-              <FileSpreadsheet className="text-white text-xl" size={24} />
-            </div>
-            الدورات المالية
-          </h2>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="stat-icon bg-primary-100">
+            <FileSpreadsheet className="text-primary-600" size={24} />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900">الدورات المالية</h1>
+            <p className="text-sm text-slate-500 mt-0.5">إدارة دورات الإدارة والوكيل</p>
+          </div>
         </div>
         <button
           onClick={() => openModal()}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-semibold text-sm transition-all duration-300 active:scale-[0.98] bg-[#1e3a5f] text-white hover:bg-[#2d5a87] shadow-md"
+          className="btn btn-primary"
         >
-          <Plus size={20} />
-          <span>إنشاء دورة مالية</span>
+          <Plus size={18} />
+          <span>إنشاء دورة جديدة</span>
         </button>
       </div>
 
       {/* Cycles Grid */}
       {cycles.length === 0 ? (
-        <div className="text-center py-16 px-4 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
-          <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-slate-100 flex items-center justify-center">
-            <FileSpreadsheet className="text-4xl text-slate-400" size={40} />
+        <div className="card">
+          <div className="empty-state">
+            <FileSpreadsheet className="empty-state-icon" />
+            <p className="empty-state-title">لا توجد دورات محفوظة</p>
+            <p className="empty-state-text">أنشئ دورة مالية جديدة لربط جداول الإدارة والوكيل</p>
+            <button
+              onClick={() => openModal()}
+              className="btn btn-primary mt-4"
+            >
+              <Plus size={18} />
+              إنشاء أول دورة
+            </button>
           </div>
-          <p className="text-slate-600 font-medium mb-1">لا توجد دورات محفوظة</p>
-          <p className="text-slate-500 text-sm mb-6">أنشئ دورة مالية جديدة لربط جداول الإدارة والوكيل</p>
-          <button
-            onClick={() => openModal()}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm bg-[#1e3a5f] text-white hover:bg-[#2d5a87]"
-          >
-            <Plus size={18} />
-            إنشاء أول دورة
-          </button>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {cycles.map((cycle, index) => {
-            const color = colors[index % colors.length];
+            const gradient = gradients[index % gradients.length];
             const hasGoogle = !!(cycle.management_spreadsheet_id && cycle.agent_spreadsheet_id);
             
             return (
-              <div key={cycle.id} className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all overflow-hidden group">
-                <div className={`h-2 bg-gradient-to-r ${color}`}></div>
+              <div key={cycle.id} className="card card-hover group overflow-hidden">
+                <div className={`h-1.5 bg-gradient-to-r ${gradient}`}></div>
                 <div className="p-5">
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <h5 className="font-bold text-slate-800 text-lg">{cycle.name}</h5>
+                  <div className="flex items-start justify-between gap-3 mb-4">
+                    <h3 className="font-bold text-slate-900 text-lg flex-1">{cycle.name}</h3>
                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => openModal(cycle)}
-                        className="w-9 h-9 rounded-lg text-slate-500 hover:bg-sky-50 hover:text-[#1e3a5f] flex items-center justify-center"
+                        className="btn-ghost p-2 rounded-lg"
                         title="تعديل"
                       >
                         <Edit2 size={16} />
                       </button>
                       <button
                         onClick={() => openDeleteConfirm(cycle)}
-                        className="w-9 h-9 rounded-lg text-slate-500 hover:bg-red-50 hover:text-red-600 flex items-center justify-center"
+                        className="btn-ghost p-2 rounded-lg text-red-600 hover:bg-red-50"
                         title="حذف"
                       >
                         <Trash2 size={16} />
                       </button>
                     </div>
                   </div>
-                  <div className="space-y-2 text-sm text-slate-600">
-                    <p className="flex items-center gap-2">
-                      <Calendar className="text-slate-400" size={16} />
-                      {formatDate(cycle.created_at)}
-                    </p>
+                  
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2 text-slate-600">
+                      <Calendar size={16} className="text-slate-400" />
+                      <span>{formatDate(cycle.created_at)}</span>
+                    </div>
+                    
                     {hasGoogle ? (
-                      <p className="flex items-center gap-2 text-emerald-600">
-                        <Link size={16} />
-                        مرتبطة بـ Google
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <span className="badge badge-success">
+                          <Link size={12} className="ml-1" />
+                          مرتبطة بـ Google
+                        </span>
+                      </div>
                     ) : (
-                      <p className="flex items-center gap-2 text-amber-600">
-                        <File size={16} />
-                        ملفات محلية
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <span className="badge badge-warning">
+                          <File size={12} className="ml-1" />
+                          ملفات محلية
+                        </span>
+                      </div>
                     )}
+                    
                     {cycle.transfer_discount_pct > 0 && (
-                      <p className="flex items-center gap-2 text-slate-500">
-                        <span>%</span>
-                        خصم تحويل: {cycle.transfer_discount_pct}%
-                      </p>
+                      <div className="flex items-center gap-2 text-slate-600">
+                        <span className="text-xs">خصم التحويل:</span>
+                        <span className="badge badge-info">{cycle.transfer_discount_pct}%</span>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -239,82 +242,82 @@ const Sheet = () => {
 
       {/* Create/Edit Modal */}
       {showModal && (
-        <div
-          className="fixed inset-0 z-[1100] flex items-center justify-center p-4 max-lg:p-0 max-lg:items-end max-lg:pb-0 bg-black/60 backdrop-blur-sm overflow-hidden"
-          onClick={(e) => e.target === e.currentTarget && closeModal()}
-        >
-          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] max-lg:max-h-[100vh] max-lg:h-[100vh] flex flex-col overflow-hidden shadow-2xl">
+        <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && closeModal()}>
+          <div className="modal-content w-full max-w-3xl mx-4 max-h-[90vh] flex flex-col">
             {/* Modal Header */}
-            <div className="p-4 border-b border-slate-100 flex items-center justify-between shrink-0">
-              <h4 className="text-xl font-bold text-slate-800 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#1e3a5f]/10 flex items-center justify-center">
-                  <FileSpreadsheet className="text-[#1e3a5f]" size={20} />
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-200 shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="stat-icon bg-primary-100">
+                  <FileSpreadsheet className="text-primary-600" size={20} />
                 </div>
-                {editingCycle ? 'تعديل الدورة المالية' : 'إنشاء دورة مالية'}
-              </h4>
-              <button
-                onClick={closeModal}
-                className="w-10 h-10 rounded-xl text-slate-500 hover:bg-slate-100 flex items-center justify-center transition-colors"
-              >
+                <h2 className="text-xl font-bold text-slate-900">
+                  {editingCycle ? 'تعديل الدورة المالية' : 'إنشاء دورة مالية'}
+                </h2>
+              </div>
+              <button onClick={closeModal} className="btn-ghost p-2 rounded-lg">
                 <X size={20} />
               </button>
             </div>
 
-            {/* Modal Body */}
-            <div className="p-4 overflow-y-auto flex-1 min-h-0 overscroll-contain">
+            {/* Modal Body - Scrollable */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6">
               {/* Tabs */}
-              <div className="flex gap-2 p-1 bg-slate-100 rounded-xl mb-4">
+              <div className="flex gap-2 p-1 bg-slate-100 rounded-lg mb-6">
                 <button
                   onClick={() => setActiveTab('google')}
-                  className={`flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all ${
+                  className={`flex-1 px-4 py-2.5 rounded-md font-medium text-sm transition-all ${
                     activeTab === 'google'
-                      ? 'bg-white text-[#1e3a5f] shadow-sm'
-                      : 'text-slate-600 hover:bg-white/50'
+                      ? 'bg-white text-primary-700 shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
+                  <Cloud className="inline ml-1" size={16} />
                   استيراد من Google
                 </button>
                 <button
                   onClick={() => setActiveTab('upload')}
-                  className={`flex-1 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all ${
+                  className={`flex-1 px-4 py-2.5 rounded-md font-medium text-sm transition-all ${
                     activeTab === 'upload'
-                      ? 'bg-white text-[#1e3a5f] shadow-sm'
-                      : 'text-slate-600 hover:bg-white/50'
+                      ? 'bg-white text-primary-700 shadow-sm'
+                      : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
-                  رفع يدوي (Excel / CSV)
+                  <Upload className="inline ml-1" size={16} />
+                  رفع يدوي
                 </button>
               </div>
 
               {/* Google Import Panel */}
               {activeTab === 'google' && (
                 <div className="space-y-5">
-                  <p className="text-sm text-slate-600">اختر من جداول البيانات في حسابك — يتم جلب القائمة تلقائياً من Google.</p>
+                  <p className="text-sm text-slate-600 bg-blue-50 border border-blue-100 rounded-lg p-3">
+                    💡 اختر من جداول البيانات في حسابك — يتم جلب القائمة تلقائياً من Google
+                  </p>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {/* Management */}
-                    <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-100 space-y-3">
-                      <h4 className="font-bold text-slate-800 text-sm flex items-center gap-2">
-                        <span className="text-amber-600">🏢</span>
+                    <div className="card p-4 bg-amber-50 border-amber-200">
+                      <h4 className="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+                        <span className="text-lg">🏢</span>
                         الإدارة
                       </h4>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-3">
                         <div>
-                          <label className="block text-xs font-medium text-slate-600 mb-1">جدول الإدارة</label>
+                          <label className="label text-xs">جدول الإدارة</label>
                           <select
                             value={formData.mgmtSpreadsheetId}
                             onChange={(e) => setFormData({ ...formData, mgmtSpreadsheetId: e.target.value })}
-                            className="w-full py-2.5 px-3 border-2 border-slate-200 rounded-xl text-sm bg-white focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all min-w-0"
+                            className="input text-sm"
                           >
                             <option value="">— جاري التحميل... —</option>
                           </select>
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-slate-600 mb-1">ورقة الإدارة</label>
+                          <label className="label text-xs">ورقة الإدارة</label>
                           <select
                             value={formData.mgmtSheetName}
                             onChange={(e) => setFormData({ ...formData, mgmtSheetName: e.target.value })}
-                            className="w-full py-2.5 px-3 border border-slate-200 rounded-xl text-sm bg-white min-w-0"
+                            className="input text-sm"
                           >
                             <option value="">أول ورقة تلقائياً</option>
                           </select>
@@ -323,28 +326,28 @@ const Sheet = () => {
                     </div>
 
                     {/* Agent */}
-                    <div className="p-4 rounded-2xl bg-sky-50/80 border border-sky-100 space-y-3">
-                      <h4 className="font-bold text-slate-800 text-sm flex items-center gap-2">
-                        <span className="text-[#1e3a5f]">👔</span>
+                    <div className="card p-4 bg-blue-50 border-blue-200">
+                      <h4 className="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+                        <span className="text-lg">👔</span>
                         الوكيل
                       </h4>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-3">
                         <div>
-                          <label className="block text-xs font-medium text-slate-600 mb-1">جدول الوكيل</label>
+                          <label className="label text-xs">جدول الوكيل</label>
                           <select
                             value={formData.agentSpreadsheetId}
                             onChange={(e) => setFormData({ ...formData, agentSpreadsheetId: e.target.value })}
-                            className="w-full py-2.5 px-3 border-2 border-slate-200 rounded-xl text-sm bg-white focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 transition-all min-w-0"
+                            className="input text-sm"
                           >
                             <option value="">— جاري التحميل... —</option>
                           </select>
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-slate-600 mb-1">ورقة الوكيل</label>
+                          <label className="label text-xs">ورقة الوكيل</label>
                           <select
                             value={formData.agentSheetName}
                             onChange={(e) => setFormData({ ...formData, agentSheetName: e.target.value })}
-                            className="w-full py-2.5 px-3 border border-slate-200 rounded-xl text-sm bg-white min-w-0"
+                            className="input text-sm"
                           >
                             <option value="">أول ورقة تلقائياً</option>
                           </select>
@@ -353,11 +356,8 @@ const Sheet = () => {
                     </div>
                   </div>
 
-                  <button
-                    onClick={handleFetchFromGoogle}
-                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
-                  >
-                    <span>☁️</span>
+                  <button onClick={handleFetchFromGoogle} className="btn btn-success w-full">
+                    <Cloud size={18} />
                     جلب البيانات من Google
                   </button>
                 </div>
@@ -366,35 +366,24 @@ const Sheet = () => {
               {/* Upload Panel */}
               {activeTab === 'upload' && (
                 <div className="space-y-5">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-100">
-                      <label className="block font-semibold text-sm text-slate-800 mb-2 flex items-center gap-2">
-                        <span className="text-amber-600">🏢</span>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div className="card p-4 bg-amber-50 border-amber-200">
+                      <label className="label mb-3 flex items-center gap-2">
+                        <span className="text-lg">🏢</span>
                         ملف الإدارة
                       </label>
-                      <input
-                        type="file"
-                        accept=".xlsx,.xls,.csv"
-                        className="w-full py-2.5 px-4 border-2 border-dashed border-slate-200 rounded-xl text-sm bg-white hover:border-amber-300 transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-amber-50 file:text-amber-700 file:font-semibold"
-                      />
+                      <input type="file" accept=".xlsx,.xls,.csv" className="input text-sm file:btn file:btn-secondary file:ml-2" />
                     </div>
-                    <div className="p-4 rounded-2xl bg-sky-50/80 border border-sky-100">
-                      <label className="block font-semibold text-sm text-slate-800 mb-2 flex items-center gap-2">
-                        <span className="text-[#1e3a5f]">👔</span>
+                    <div className="card p-4 bg-blue-50 border-blue-200">
+                      <label className="label mb-3 flex items-center gap-2">
+                        <span className="text-lg">👔</span>
                         ملف الوكيل
                       </label>
-                      <input
-                        type="file"
-                        accept=".xlsx,.xls,.csv"
-                        className="w-full py-2.5 px-4 border-2 border-dashed border-slate-200 rounded-xl text-sm bg-white hover:border-sky-300 transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-sky-50 file:text-sky-700 file:font-semibold"
-                      />
+                      <input type="file" accept=".xlsx,.xls,.csv" className="input text-sm file:btn file:btn-secondary file:ml-2" />
                     </div>
                   </div>
-                  <button
-                    onClick={handleUploadFiles}
-                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm bg-sky-600 text-white hover:bg-sky-700 transition-colors"
-                  >
-                    <span>⬆️</span>
+                  <button onClick={handleUploadFiles} className="btn btn-primary w-full">
+                    <Upload size={18} />
                     تحميل وقراءة الملفات
                   </button>
                 </div>
@@ -402,23 +391,34 @@ const Sheet = () => {
 
               {/* Save Panel */}
               {showSavePanel && (
-                <div className="mt-4 pt-4 border-t border-slate-200">
-                  <div className="flex gap-4 mb-3 p-3 bg-slate-50 rounded-xl">
-                    <span className="text-slate-600">الإدارة: <strong className="text-[#1e3a5f]">{formData.managementRows}</strong> صف</span>
-                    <span className="text-slate-600">الوكيل: <strong className="text-[#1e3a5f]">{formData.agentRows}</strong> صف</span>
+                <div className="mt-6 pt-6 border-t border-slate-200 space-y-4">
+                  <div className="flex gap-4 p-4 bg-slate-50 rounded-lg">
+                    <div className="flex-1 text-center">
+                      <p className="text-xs text-slate-500 mb-1">الإدارة</p>
+                      <p className="text-2xl font-bold text-primary-600">{formData.managementRows}</p>
+                      <p className="text-xs text-slate-500">صف</p>
+                    </div>
+                    <div className="w-px bg-slate-300"></div>
+                    <div className="flex-1 text-center">
+                      <p className="text-xs text-slate-500 mb-1">الوكيل</p>
+                      <p className="text-2xl font-bold text-primary-600">{formData.agentRows}</p>
+                      <p className="text-xs text-slate-500">صف</p>
+                    </div>
                   </div>
-                  <div className="mb-4">
-                    <label className="block mb-2 font-semibold text-sm text-slate-800">اسم الدورة المالية</label>
+                  
+                  <div>
+                    <label className="label">اسم الدورة المالية</label>
                     <input
                       type="text"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="مثال: دورة يناير 2025"
-                      className="w-full py-3 px-4 border-2 border-slate-200 rounded-xl text-sm bg-white focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 transition-all"
+                      className="input"
                     />
                   </div>
-                  <div className="mb-4">
-                    <label className="block mb-2 font-semibold text-sm text-slate-800">نسبة خصم التحويل للدورة (%)</label>
+                  
+                  <div>
+                    <label className="label">نسبة خصم التحويل للدورة (%)</label>
                     <input
                       type="number"
                       value={formData.transferDiscountPct}
@@ -427,9 +427,11 @@ const Sheet = () => {
                       max="100"
                       step="0.1"
                       placeholder="0"
-                      className="w-full py-3 px-4 border-2 border-slate-200 rounded-xl text-sm bg-white focus:outline-none focus:border-sky-500"
+                      className="input"
                     />
-                    <p className="text-xs text-slate-500 mt-1">تُطبّق على جدول الوكيل؛ الجزء المخصوم يُسجّل كربح عند إعادة بناء المؤجل.</p>
+                    <p className="text-xs text-slate-500 mt-1.5">
+                      تُطبّق على جدول الوكيل؛ الجزء المخصوم يُسجّل كربح عند إعادة بناء المؤجل.
+                    </p>
                   </div>
                 </div>
               )}
@@ -437,14 +439,16 @@ const Sheet = () => {
 
             {/* Modal Footer */}
             {showSavePanel && (
-              <div className="p-4 pt-0 border-t border-slate-200 bg-white shrink-0">
-                <button
-                  onClick={handleSaveCycle}
-                  className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-sm bg-[#1e3a5f] text-white hover:bg-[#2d5a87] transition-colors shadow-md"
-                >
-                  <span>💾</span>
-                  حفظ الدورة
-                </button>
+              <div className="p-4 sm:p-6 border-t border-slate-200 bg-slate-50 shrink-0">
+                <div className="flex gap-3">
+                  <button onClick={closeModal} className="btn btn-secondary flex-1">
+                    إلغاء
+                  </button>
+                  <button onClick={handleSaveCycle} className="btn btn-primary flex-1">
+                    <FileSpreadsheet size={18} />
+                    حفظ الدورة
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -453,30 +457,26 @@ const Sheet = () => {
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div
-          className="fixed inset-0 z-[1100] flex items-center justify-center p-4 py-6 bg-black/60 backdrop-blur-sm"
-          onClick={(e) => e.target === e.currentTarget && closeDeleteConfirm()}
-        >
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-            <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-red-100 flex items-center justify-center">
-              <Trash2 className="text-red-600" size={24} />
+        <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && closeDeleteConfirm()}>
+          <div className="modal-content w-full max-w-md mx-4 p-6">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center">
+                <Trash2 className="text-red-600" size={28} />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">حذف الدورة المالية</h3>
+              <p className="text-slate-600">
+                هل أنت متأكد من حذف "<span className="font-semibold">{deleteTarget?.name}</span>"؟
+                <br />
+                <span className="text-sm text-red-600">لا يمكن التراجع عن هذا الإجراء.</span>
+              </p>
             </div>
-            <h4 className="text-lg font-bold text-slate-800 text-center mb-2">حذف الدورة المالية</h4>
-            <p className="text-slate-600 text-sm text-center mb-6">
-              هل أنت متأكد من حذف "{deleteTarget?.name}"؟ لا يمكن التراجع عن هذا الإجراء.
-            </p>
             <div className="flex gap-3">
-              <button
-                onClick={closeDeleteConfirm}
-                className="flex-1 py-3 rounded-xl font-semibold text-sm bg-slate-100 text-slate-700 hover:bg-slate-200"
-              >
+              <button onClick={closeDeleteConfirm} className="btn btn-secondary flex-1">
                 إلغاء
               </button>
-              <button
-                onClick={handleDeleteCycle}
-                className="flex-1 py-3 rounded-xl font-semibold text-sm bg-red-600 text-white hover:bg-red-700"
-              >
-                حذف
+              <button onClick={handleDeleteCycle} className="btn btn-danger flex-1">
+                <Trash2 size={18} />
+                حذف نهائياً
               </button>
             </div>
           </div>
