@@ -6,6 +6,7 @@ import { DataProvider } from './context/DataContext';
 // Pages
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import Analytics from './pages/Analytics';
 import Clients from './pages/Clients';
 import Funds from './pages/Funds';
 import Shipping from './pages/Shipping';
@@ -97,6 +98,7 @@ function App() {
           >
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="analytics" element={<Analytics />} />
             <Route path="sheet" element={<Sheet />} />
             <Route path="payroll" element={<Payroll />} />
             <Route path="search" element={<SearchPage />} />

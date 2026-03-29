@@ -1353,6 +1353,260 @@ async def search(q: str, user: dict = Depends(get_current_user)):
     
     return results
 
+# ============== Analytics Routes ==============
+@app.get("/api/analytics/overview")
+async def get_analytics_overview(user: dict = Depends(get_current_user)):
+    cycle = await get_active_cycle(user["_id"])
+    
+    # Get all funds total
+    funds_pipeline = [
+        {"$match": {"user_id": user["_id"]}},
+        {"$group": {"_id": None, "total": {"$sum": "$balance"}}}
+    ]
+    funds_result = await db.funds.aggregate(funds_pipeline).to_list(1)
+    total_funds = funds_result[0]["total"] if funds_result else 0
+    
+    # Get counts
+    clients_count = await db.clients.count_documents({"user_id": user["_id"]})
+    members_count = await db.members.count_documents({"user_id": user["_id"]})
+    agencies_count = await db.sub_agencies.count_documents({"user_id": user["_id"]})
+    companies_count = await db.transfer_companies.count_documents({"user_id": user["_id"]})
+    
+    # Active debts count
+    active_debts = await db.debts.count_documents({"user_id": user["_id"], "remaining": {"$gt": 0}})
+    
+    # Pending payments count
+    pending_payments = await db.payment_dues.count_documents({"user_id": user["_id"], "is_paid": False})
+    
+    return {
+        "total_funds": total_funds,
+        "clients_count": clients_count,
+        "members_count": members_count,
+        "agencies_count": agencies_count,
+        "companies_count": companies_count,
+        "active_debts": active_debts,
+        "pending_payments": pending_payments,
+        "active_cycle": cycle["name"] if cycle else None
+    }
+
+@app.get("/api/analytics/profit-expense-trend")
+async def get_profit_expense_trend(days: int = 30, user: dict = Depends(get_current_user)):
+    cycle = await get_active_cycle(user["_id"])
+    if not cycle:
+        return {"data": []}
+    
+    start_date = datetime.now(timezone.utc) - timedelta(days=days)
+    
+    # Get expenses by date
+    expenses_pipeline = [
+        {"$match": {
+            "user_id": user["_id"],
+            "cycle_id": cycle["_id"],
+            "created_at": {"$gte": start_date}
+        }},
+        {"$group": {
+            "_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$created_at"}},
+            "total": {"$sum": "$amount"}
+        }},
+        {"$sort": {"_id": 1}}
+    ]
+    expenses_data = await db.expenses.aggregate(expenses_pipeline).to_list(100)
+    
+    # Get profits by date
+    profits_pipeline = [
+        {"$match": {
+            "user_id": user["_id"],
+            "cycle_id": cycle["_id"],
+            "created_at": {"$gte": start_date}
+        }},
+        {"$group": {
+            "_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$created_at"}},
+            "total": {"$sum": "$amount"}
+        }},
+        {"$sort": {"_id": 1}}
+    ]
+    profits_data = await db.profit_sources.aggregate(profits_pipeline).to_list(100)
+    
+    # Merge data
+    dates = set()
+    expense_map = {}
+    profit_map = {}
+    
+    for e in expenses_data:
+        dates.add(e["_id"])
+        expense_map[e["_id"]] = e["total"]
+    
+    for p in profits_data:
+        dates.add(p["_id"])
+        profit_map[p["_id"]] = p["total"]
+    
+    result = []
+    for date in sorted(dates):
+        result.append({
+            "date": date,
+            "expenses": expense_map.get(date, 0),
+            "profits": profit_map.get(date, 0)
+        })
+    
+    return {"data": result}
+
+@app.get("/api/analytics/profit-by-source")
+async def get_profit_by_source(user: dict = Depends(get_current_user)):
+    cycle = await get_active_cycle(user["_id"])
+    if not cycle:
+        return {"data": []}
+    
+    pipeline = [
+        {"$match": {"user_id": user["_id"], "cycle_id": cycle["_id"]}},
+        {"$group": {
+            "_id": "$source_type",
+            "total": {"$sum": "$amount"}
+        }},
+        {"$sort": {"total": -1}}
+    ]
+    
+    results = await db.profit_sources.aggregate(pipeline).to_list(20)
+    
+    source_labels = {
+        "shipping": "أرباح الشحن",
+        "fx_spread": "فرق التصريف",
+        "approval_commission": "عمولة الاعتمادات",
+        "brokerage": "وساطة إدارية"
+    }
+    
+    data = [{"name": source_labels.get(r["_id"], r["_id"]), "value": r["total"], "type": r["_id"]} for r in results]
+    
+    return {"data": data}
+
+@app.get("/api/analytics/expense-by-category")
+async def get_expense_by_category(user: dict = Depends(get_current_user)):
+    cycle = await get_active_cycle(user["_id"])
+    if not cycle:
+        return {"data": []}
+    
+    pipeline = [
+        {"$match": {"user_id": user["_id"], "cycle_id": cycle["_id"]}},
+        {"$group": {
+            "_id": {"$ifNull": ["$category", "أخرى"]},
+            "total": {"$sum": "$amount"}
+        }},
+        {"$sort": {"total": -1}}
+    ]
+    
+    results = await db.expenses.aggregate(pipeline).to_list(20)
+    
+    data = [{"name": r["_id"], "value": r["total"]} for r in results]
+    
+    return {"data": data}
+
+@app.get("/api/analytics/shipping-trend")
+async def get_shipping_trend(days: int = 30, user: dict = Depends(get_current_user)):
+    cycle = await get_active_cycle(user["_id"])
+    if not cycle:
+        return {"data": []}
+    
+    start_date = datetime.now(timezone.utc) - timedelta(days=days)
+    
+    pipeline = [
+        {"$match": {
+            "user_id": user["_id"],
+            "cycle_id": cycle["_id"],
+            "created_at": {"$gte": start_date}
+        }},
+        {"$group": {
+            "_id": {
+                "date": {"$dateToString": {"format": "%Y-%m-%d", "date": "$created_at"}},
+                "type": "$transaction_type"
+            },
+            "quantity": {"$sum": "$quantity"},
+            "total": {"$sum": "$total"}
+        }},
+        {"$sort": {"_id.date": 1}}
+    ]
+    
+    results = await db.shipping_transactions.aggregate(pipeline).to_list(200)
+    
+    # Organize by date
+    date_map = {}
+    for r in results:
+        date = r["_id"]["date"]
+        if date not in date_map:
+            date_map[date] = {"date": date, "buy": 0, "sell": 0, "buy_total": 0, "sell_total": 0}
+        
+        if r["_id"]["type"] == "buy":
+            date_map[date]["buy"] = r["quantity"]
+            date_map[date]["buy_total"] = r["total"]
+        else:
+            date_map[date]["sell"] = r["quantity"]
+            date_map[date]["sell_total"] = r["total"]
+    
+    data = [date_map[d] for d in sorted(date_map.keys())]
+    
+    return {"data": data}
+
+@app.get("/api/analytics/debt-summary")
+async def get_debt_summary(user: dict = Depends(get_current_user)):
+    # By entity type
+    pipeline = [
+        {"$match": {"user_id": user["_id"], "remaining": {"$gt": 0}}},
+        {"$group": {
+            "_id": {"type": "$debt_type", "entity": "$entity_type"},
+            "total": {"$sum": "$remaining"},
+            "count": {"$sum": 1}
+        }}
+    ]
+    
+    results = await db.debts.aggregate(pipeline).to_list(20)
+    
+    entity_labels = {"company": "شركات", "fund": "صناديق", "agency": "وكالات"}
+    
+    payable_data = []
+    receivable_data = []
+    
+    for r in results:
+        item = {
+            "name": entity_labels.get(r["_id"]["entity"], r["_id"]["entity"]),
+            "value": r["total"],
+            "count": r["count"]
+        }
+        if r["_id"]["type"] == "payable":
+            payable_data.append(item)
+        else:
+            receivable_data.append(item)
+    
+    return {"payable": payable_data, "receivable": receivable_data}
+
+@app.get("/api/analytics/recent-transactions")
+async def get_recent_transactions(limit: int = 10, user: dict = Depends(get_current_user)):
+    transactions = []
+    
+    # Recent expenses
+    expenses = await db.expenses.find({"user_id": user["_id"]}).sort("created_at", -1).limit(limit).to_list(limit)
+    for e in expenses:
+        transactions.append({
+            "type": "expense",
+            "amount": -e["amount"],
+            "description": e["description"],
+            "category": e.get("category"),
+            "date": e["created_at"].isoformat() if isinstance(e["created_at"], datetime) else e["created_at"]
+        })
+    
+    # Recent profits
+    profits = await db.profit_sources.find({"user_id": user["_id"]}).sort("created_at", -1).limit(limit).to_list(limit)
+    for p in profits:
+        transactions.append({
+            "type": "profit",
+            "amount": p["amount"],
+            "description": p.get("notes", "ربح"),
+            "category": p.get("source_type"),
+            "date": p["created_at"].isoformat() if isinstance(p["created_at"], datetime) else p["created_at"]
+        })
+    
+    # Sort by date
+    transactions.sort(key=lambda x: x["date"], reverse=True)
+    
+    return {"data": transactions[:limit]}
+
 # ============== Health Check ==============
 @app.get("/api/health")
 async def health_check():

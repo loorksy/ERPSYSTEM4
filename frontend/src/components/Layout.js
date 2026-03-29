@@ -34,7 +34,8 @@ import {
   ArrowDownCircle,
   ArrowUpCircle,
   Package,
-  CircleDollarSign,
+  Coins,
+  BarChart3,
   RefreshCw,
   Home
 } from 'lucide-react';
@@ -53,6 +54,7 @@ const Layout = () => {
       title: 'الرئيسية',
       items: [
         { icon: LayoutDashboard, label: 'لوحة التحكم', path: '/dashboard' },
+        { icon: BarChart3, label: 'التحليلات', path: '/analytics' },
         { icon: FileSpreadsheet, label: 'Sheet', path: '/sheet' },
       ]
     },
@@ -92,7 +94,7 @@ const Layout = () => {
       items: [
         { icon: Package, label: 'الشحن', path: '/shipping' },
         { icon: DollarSign, label: 'المصاريف', path: '/expenses-manual' },
-        { icon: CircleDollarSign, label: 'مصادر الربح', path: '/profit-sources' },
+        { icon: Coins, label: 'مصادر الربح', path: '/profit-sources' },
         { icon: Briefcase, label: 'وساطة إدارية', path: '/admin-brokerage' },
       ]
     },
