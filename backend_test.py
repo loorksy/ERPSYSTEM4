@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 
 class LorkERPTester:
-    def __init__(self, base_url: str = "https://cec0fcf7-2909-471f-bc2a-e559ef6e5cb8.preview.emergentagent.com"):
+    def __init__(self, base_url: str = "https://payroll-verify-1.preview.emergentagent.com"):
         self.base_url = base_url
         self.session = requests.Session()
         self.session.headers.update({'Content-Type': 'application/json'})
