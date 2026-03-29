@@ -240,68 +240,79 @@ const Sheet = () => {
         </div>
       )}
 
-      {/* Create/Edit Modal */}
+      {/* Create/Edit Modal - تصميم جديد من الصفر */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4" onClick={(e) => e.target === e.currentTarget && closeModal()}>
-          <div className="bg-white w-full sm:max-w-2xl sm:rounded-2xl rounded-t-3xl max-h-[80vh] sm:max-h-[90vh] flex flex-col shadow-2xl animate-slide-in-up mb-0 sm:mb-0">
-            
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-slate-200 shrink-0 bg-gradient-to-r from-primary-50 to-blue-50">
-              <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-xl bg-primary-100 flex items-center justify-center">
-                  <FileSpreadsheet className="text-primary-600" size={18} />
+        <>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" 
+            onClick={closeModal}
+          />
+          
+          {/* Modal Container */}
+          <div className="fixed inset-x-0 bottom-0 sm:inset-0 z-50 flex items-end sm:items-center justify-center pointer-events-none">
+            <div className="bg-white w-full sm:max-w-2xl h-[85vh] sm:h-auto sm:max-h-[85vh] flex flex-col sm:rounded-2xl rounded-t-3xl shadow-2xl pointer-events-auto animate-slide-in-up">
+              
+              {/* Header - Fixed */}
+              <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 bg-gradient-to-r from-blue-50 to-cyan-50 shrink-0 rounded-t-3xl sm:rounded-t-2xl">
+                <div className="flex items-center gap-2">
+                  <div className="w-9 h-9 rounded-xl bg-primary-600 flex items-center justify-center">
+                    <FileSpreadsheet className="text-white" size={18} />
+                  </div>
+                  <h2 className="text-base font-bold text-slate-900">
+                    {editingCycle ? 'تعديل الدورة' : 'إنشاء دورة'}
+                  </h2>
                 </div>
-                <h2 className="text-lg font-bold text-slate-900">
-                  {editingCycle ? 'تعديل الدورة' : 'إنشاء دورة مالية'}
-                </h2>
+                <button 
+                  onClick={closeModal} 
+                  className="w-9 h-9 rounded-lg hover:bg-white/50 flex items-center justify-center transition-colors"
+                >
+                  <X size={20} />
+                </button>
               </div>
-              <button onClick={closeModal} className="w-9 h-9 rounded-lg hover:bg-slate-100 flex items-center justify-center transition-colors">
-                <X size={20} />
-              </button>
-            </div>
 
-            {/* Tabs */}
-            <div className="flex gap-1 p-2 bg-slate-50 border-b border-slate-200 shrink-0">
-              <button
-                onClick={() => setActiveTab('google')}
-                className={`flex-1 px-3 py-2 rounded-lg font-medium text-xs transition-all ${
-                  activeTab === 'google'
-                    ? 'bg-white text-primary-700 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <Cloud className="inline ml-1" size={14} />
-                Google
-              </button>
-              <button
-                onClick={() => setActiveTab('upload')}
-                className={`flex-1 px-3 py-2 rounded-lg font-medium text-xs transition-all ${
-                  activeTab === 'upload'
-                    ? 'bg-white text-primary-700 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <Upload className="inline ml-1" size={14} />
-                رفع ملفات
-              </button>
-            </div>
+              {/* Tabs - Fixed */}
+              <div className="flex gap-1 p-2 bg-slate-100 shrink-0">
+                <button
+                  onClick={() => setActiveTab('google')}
+                  className={`flex-1 px-3 py-2 rounded-lg font-semibold text-xs transition-all ${
+                    activeTab === 'google'
+                      ? 'bg-white text-primary-600 shadow-sm'
+                      : 'text-slate-600'
+                  }`}
+                >
+                  <Cloud className="inline ml-1" size={14} />
+                  Google
+                </button>
+                <button
+                  onClick={() => setActiveTab('upload')}
+                  className={`flex-1 px-3 py-2 rounded-lg font-semibold text-xs transition-all ${
+                    activeTab === 'upload'
+                      ? 'bg-white text-primary-600 shadow-sm'
+                      : 'text-slate-600'
+                  }`}
+                >
+                  <Upload className="inline ml-1" size={14} />
+                  رفع ملفات
+                </button>
+              </div>
 
-            {/* Body - Scrollable Content */}
-            <div className="flex-1 overflow-y-auto overscroll-contain min-h-0">
-              <div className="p-4 space-y-3">
+              {/* Body - Scrollable */}
+              <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 space-y-3">
                 
-                {/* Google Import */}
+                {/* Google Tab */}
                 {activeTab === 'google' && (
                   <>
-                    <div className="text-xs text-slate-600 bg-blue-50 border border-blue-100 rounded-lg p-2">
-                      💡 اختر الجداول من حسابك في Google Sheets
+                    <div className="text-xs text-blue-700 bg-blue-50 border border-blue-200 rounded-lg p-2 flex items-start gap-2">
+                      <span className="shrink-0">💡</span>
+                      <span>اختر الجداول من حسابك في Google Sheets</span>
                     </div>
                     
-                    {/* Management Card */}
+                    {/* Management */}
                     <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-3">
                       <div className="flex items-center gap-1.5 mb-2">
                         <span className="text-base">🏢</span>
-                        <h4 className="font-semibold text-slate-800 text-xs">الإدارة</h4>
+                        <span className="font-semibold text-slate-800 text-xs">الإدارة</span>
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <div>
@@ -309,9 +320,9 @@ const Sheet = () => {
                           <select
                             value={formData.mgmtSpreadsheetId}
                             onChange={(e) => setFormData({ ...formData, mgmtSpreadsheetId: e.target.value })}
-                            className="w-full px-2 py-1.5 text-xs border border-amber-300 rounded-lg bg-white/80 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                            className="w-full px-2 py-1.5 text-xs border-2 border-amber-300 rounded-lg bg-white focus:outline-none focus:border-amber-500"
                           >
-                            <option value="">اختر الجدول</option>
+                            <option value="">اختر...</option>
                           </select>
                         </div>
                         <div>
@@ -319,7 +330,7 @@ const Sheet = () => {
                           <select
                             value={formData.mgmtSheetName}
                             onChange={(e) => setFormData({ ...formData, mgmtSheetName: e.target.value })}
-                            className="w-full px-2 py-1.5 text-xs border border-amber-300 rounded-lg bg-white/80 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                            className="w-full px-2 py-1.5 text-xs border-2 border-amber-300 rounded-lg bg-white focus:outline-none focus:border-amber-500"
                           >
                             <option value="">أول ورقة</option>
                           </select>
@@ -327,11 +338,11 @@ const Sheet = () => {
                       </div>
                     </div>
 
-                    {/* Agent Card */}
+                    {/* Agent */}
                     <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-xl p-3">
                       <div className="flex items-center gap-1.5 mb-2">
                         <span className="text-base">👔</span>
-                        <h4 className="font-semibold text-slate-800 text-xs">الوكيل</h4>
+                        <span className="font-semibold text-slate-800 text-xs">الوكيل</span>
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <div>
@@ -339,9 +350,9 @@ const Sheet = () => {
                           <select
                             value={formData.agentSpreadsheetId}
                             onChange={(e) => setFormData({ ...formData, agentSpreadsheetId: e.target.value })}
-                            className="w-full px-2 py-1.5 text-xs border border-blue-300 rounded-lg bg-white/80 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                            className="w-full px-2 py-1.5 text-xs border-2 border-blue-300 rounded-lg bg-white focus:outline-none focus:border-blue-500"
                           >
-                            <option value="">اختر الجدول</option>
+                            <option value="">اختر...</option>
                           </select>
                         </div>
                         <div>
@@ -349,7 +360,7 @@ const Sheet = () => {
                           <select
                             value={formData.agentSheetName}
                             onChange={(e) => setFormData({ ...formData, agentSheetName: e.target.value })}
-                            className="w-full px-2 py-1.5 text-xs border border-blue-300 rounded-lg bg-white/80 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                            className="w-full px-2 py-1.5 text-xs border-2 border-blue-300 rounded-lg bg-white focus:outline-none focus:border-blue-500"
                           >
                             <option value="">أول ورقة</option>
                           </select>
@@ -359,32 +370,30 @@ const Sheet = () => {
                   </>
                 )}
 
-                {/* Upload Files */}
+                {/* Upload Tab */}
                 {activeTab === 'upload' && (
                   <>
-                    {/* Management File */}
                     <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-3">
                       <div className="flex items-center gap-1.5 mb-2">
                         <span className="text-base">🏢</span>
-                        <h4 className="font-semibold text-slate-800 text-xs">ملف الإدارة</h4>
+                        <span className="font-semibold text-slate-800 text-xs">ملف الإدارة</span>
                       </div>
                       <input 
                         type="file" 
                         accept=".xlsx,.xls,.csv" 
-                        className="w-full text-[11px] border border-amber-300 rounded-lg bg-white/80 file:mr-2 file:py-1.5 file:px-3 file:border-0 file:bg-amber-100 file:text-amber-700 file:rounded-md file:text-[11px] file:font-medium hover:file:bg-amber-200" 
+                        className="w-full text-[11px] border-2 border-amber-300 rounded-lg bg-white p-2 file:mr-2 file:py-1 file:px-2 file:border-0 file:bg-amber-100 file:text-amber-700 file:rounded file:text-[10px] file:font-medium" 
                       />
                     </div>
 
-                    {/* Agent File */}
                     <div className="bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-200 rounded-xl p-3">
                       <div className="flex items-center gap-1.5 mb-2">
                         <span className="text-base">👔</span>
-                        <h4 className="font-semibold text-slate-800 text-xs">ملف الوكيل</h4>
+                        <span className="font-semibold text-slate-800 text-xs">ملف الوكيل</span>
                       </div>
                       <input 
                         type="file" 
                         accept=".xlsx,.xls,.csv" 
-                        className="w-full text-[11px] border border-blue-300 rounded-lg bg-white/80 file:mr-2 file:py-1.5 file:px-3 file:border-0 file:bg-blue-100 file:text-blue-700 file:rounded-md file:text-[11px] file:font-medium hover:file:bg-blue-200" 
+                        className="w-full text-[11px] border-2 border-blue-300 rounded-lg bg-white p-2 file:mr-2 file:py-1 file:px-2 file:border-0 file:bg-blue-100 file:text-blue-700 file:rounded file:text-[10px] file:font-medium" 
                       />
                     </div>
                   </>
@@ -392,96 +401,91 @@ const Sheet = () => {
 
                 {/* Save Panel */}
                 {showSavePanel && (
-                  <>
-                    <div className="bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-xl p-3">
-                      <div className="flex gap-3 mb-3">
-                        <div className="flex-1 text-center py-2 bg-white rounded-lg">
-                          <p className="text-xs text-slate-500 mb-0.5">الإدارة</p>
-                          <p className="text-xl font-bold text-primary-600">{formData.managementRows}</p>
-                          <p className="text-[10px] text-slate-500">صف</p>
-                        </div>
-                        <div className="flex-1 text-center py-2 bg-white rounded-lg">
-                          <p className="text-xs text-slate-500 mb-0.5">الوكيل</p>
-                          <p className="text-xl font-bold text-primary-600">{formData.agentRows}</p>
-                          <p className="text-[10px] text-slate-500">صف</p>
-                        </div>
+                  <div className="bg-gradient-to-br from-slate-50 to-slate-100 border-2 border-slate-300 rounded-xl p-3">
+                    <div className="flex gap-2 mb-3">
+                      <div className="flex-1 text-center py-2 bg-white rounded-lg border border-slate-200">
+                        <p className="text-[10px] text-slate-500 mb-0.5">الإدارة</p>
+                        <p className="text-xl font-bold text-primary-600">{formData.managementRows}</p>
+                        <p className="text-[9px] text-slate-500">صف</p>
                       </div>
-                      
-                      <div className="space-y-2">
-                        <div>
-                          <label className="block text-[10px] font-medium text-slate-600 mb-1">اسم الدورة</label>
-                          <input
-                            type="text"
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            placeholder="مثال: دورة يناير 2025"
-                            className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg bg-white focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-[10px] font-medium text-slate-600 mb-1">نسبة الخصم (%)</label>
-                          <input
-                            type="number"
-                            value={formData.transferDiscountPct}
-                            onChange={(e) => setFormData({ ...formData, transferDiscountPct: e.target.value })}
-                            min="0"
-                            max="100"
-                            step="0.1"
-                            placeholder="0"
-                            className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg bg-white focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"
-                          />
-                          <p className="text-[10px] text-slate-500 mt-1">
-                            تُطبّق على جدول الوكيل عند إعادة بناء المؤجل
-                          </p>
-                        </div>
+                      <div className="flex-1 text-center py-2 bg-white rounded-lg border border-slate-200">
+                        <p className="text-[10px] text-slate-500 mb-0.5">الوكيل</p>
+                        <p className="text-xl font-bold text-primary-600">{formData.agentRows}</p>
+                        <p className="text-[9px] text-slate-500">صف</p>
                       </div>
                     </div>
-                  </>
+                    
+                    <div className="space-y-2">
+                      <div>
+                        <label className="block text-[10px] font-medium text-slate-600 mb-1">اسم الدورة</label>
+                        <input
+                          type="text"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          placeholder="دورة يناير 2025"
+                          className="w-full px-2 py-1.5 text-xs border-2 border-slate-300 rounded-lg bg-white focus:outline-none focus:border-primary-500"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-[10px] font-medium text-slate-600 mb-1">نسبة الخصم (%)</label>
+                        <input
+                          type="number"
+                          value={formData.transferDiscountPct}
+                          onChange={(e) => setFormData({ ...formData, transferDiscountPct: e.target.value })}
+                          min="0"
+                          max="100"
+                          step="0.1"
+                          placeholder="0"
+                          className="w-full px-2 py-1.5 text-xs border-2 border-slate-300 rounded-lg bg-white focus:outline-none focus:border-primary-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 )}
               </div>
-            </div>
 
-            {/* Footer - Sticky and Always Visible */}
-            <div className="sticky bottom-0 p-3 border-t-2 border-slate-300 bg-white shrink-0 shadow-[0_-4px_12px_rgba(0,0,0,0.1)]">
-              {!showSavePanel ? (
-                <button 
-                  onClick={activeTab === 'google' ? handleFetchFromGoogle : handleUploadFiles} 
-                  className="w-full h-12 flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold text-sm rounded-xl shadow-lg active:scale-[0.98] transition-all"
-                >
-                  {activeTab === 'google' ? (
-                    <>
-                      <Cloud size={20} />
-                      <span>جلب البيانات من Google</span>
-                    </>
-                  ) : (
-                    <>
-                      <Upload size={20} />
-                      <span>تحميل وقراءة الملفات</span>
-                    </>
-                  )}
-                </button>
-              ) : (
-                <div className="flex gap-2">
+              {/* Footer - Fixed at Bottom */}
+              <div className="border-t-4 border-primary-200 bg-white px-4 py-3 shrink-0">
+                {!showSavePanel ? (
                   <button 
-                    onClick={closeModal} 
-                    className="flex-1 h-12 flex items-center justify-center bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm rounded-xl transition-colors"
+                    onClick={activeTab === 'google' ? handleFetchFromGoogle : handleUploadFiles} 
+                    className="w-full h-12 flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold text-sm rounded-xl shadow-lg active:scale-[0.97] transition-all"
                   >
-                    إلغاء
+                    {activeTab === 'google' ? (
+                      <>
+                        <Cloud size={20} />
+                        <span>جلب البيانات من Google</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload size={20} />
+                        <span>تحميل الملفات</span>
+                      </>
+                    )}
                   </button>
-                  <button 
-                    onClick={handleSaveCycle} 
-                    className="flex-1 h-12 flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-bold text-sm rounded-xl shadow-lg active:scale-[0.98] transition-all"
-                  >
-                    <FileSpreadsheet size={18} />
-                    <span>حفظ الدورة</span>
-                  </button>
-                </div>
-              )}
-            </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={closeModal} 
+                      className="flex-1 h-12 flex items-center justify-center bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm rounded-xl transition-colors"
+                    >
+                      إلغاء
+                    </button>
+                    <button 
+                      onClick={handleSaveCycle} 
+                      className="flex-1 h-12 flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-bold text-sm rounded-xl shadow-lg active:scale-[0.97] transition-all"
+                    >
+                      <FileSpreadsheet size={18} />
+                      <span>حفظ</span>
+                    </button>
+                  </div>
+                )}
+              </div>
 
+            </div>
           </div>
-        </div>
+        </>
       )}
 
       {/* Delete Confirmation Modal */}
