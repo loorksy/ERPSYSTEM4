@@ -1,0 +1,15 @@
+{
+  "name": "lorkerp-system",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cd frontend && npm run start",
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm run start",
+    "install-frontend": "cd frontend && npm install"
+  },
+  "dependencies": {
+    "axios": "^1.14.0",
+    "react": "^19.2.4"
+  }
+}
