@@ -26,6 +26,8 @@ import MainAgency from './pages/MainAgency';
 import FxSpread from './pages/FxSpread';
 import PaymentDue from './pages/PaymentDue';
 import ProfitSources from './pages/ProfitSources';
+import DeferredBalance from './pages/DeferredBalance';
+import ClientPortal from './pages/ClientPortal';
 import { PayablesUs, ReceivablesToUs, AdminBrokerage } from './pages/DebtPages';
 
 // Components
@@ -115,11 +117,13 @@ function App() {
             <Route path="payables-us" element={<PayablesUs />} />
             <Route path="receivables-to-us" element={<ReceivablesToUs />} />
             <Route path="payment-due" element={<PaymentDue />} />
+            <Route path="deferred-balance" element={<DeferredBalance />} />
             <Route path="fx-spread" element={<FxSpread />} />
             <Route path="shipping" element={<Shipping />} />
             <Route path="expenses-manual" element={<Expenses />} />
             <Route path="profit-sources" element={<ProfitSources />} />
             <Route path="admin-brokerage" element={<AdminBrokerage />} />
+            <Route path="client-portal" element={<ClientPortal />} />
             <Route path="settings" element={<Settings />} />
           </Route>
 
