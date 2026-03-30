@@ -115,7 +115,7 @@ const Layout = () => {
   ];
 
   const fabOutActions = [
-    { icon: Package, label: 'شحن', action: () => navigate('/shipping?type=out') },
+    { icon: Package, label: 'شحن', action: () => navigate('/shipping?fab=out') },
     { icon: Building, label: 'وكالة فرعية', action: () => navigate('/sub-agencies?action=bonus') },
     { icon: Truck, label: 'شركة تحويل', action: () => navigate('/transfer-companies?action=disburse') },
     { icon: Wallet, label: 'صندوق', action: () => navigate('/funds?action=transfer') },
@@ -124,7 +124,7 @@ const Layout = () => {
   ];
 
   const fabInActions = [
-    { icon: Package, label: 'شحن + تبديل راتب', action: () => navigate('/shipping?type=in') },
+    { icon: Package, label: 'شحن + تبديل راتب', action: () => navigate('/shipping?fab=in&qaFocus=swap') },
     { icon: Receipt, label: 'دين', action: () => navigate('/debts?action=add') },
     { icon: CheckCircle, label: 'اعتماد', action: () => navigate('/approvals?action=add') },
     { icon: TrendingUp, label: 'فرق تصريف', action: () => navigate('/fx-spread?action=add') },

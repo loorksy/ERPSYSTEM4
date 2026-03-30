@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import { Truck, Plus, X, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
 
@@ -76,6 +77,10 @@ const TransferCompanies = () => {
                 <ArrowUpCircle className="w-4 h-4" />
                 صرف
               </button>
+              <Link to={`/transfer-companies/${company._id}`} className="btn btn-secondary w-full mt-2">
+                <Truck className="w-4 h-4" />
+                ملف الشركة
+              </Link>
             </div>
           ))}
         </div>

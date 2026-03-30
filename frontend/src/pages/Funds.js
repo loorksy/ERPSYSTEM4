@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useData } from '../context/DataContext';
 import { useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Wallet, Plus, ArrowUpCircle, ArrowDownCircle, X, History } from 'lucide-react';
 
 const Funds = () => {
@@ -168,6 +169,10 @@ const Funds = () => {
                   <History className="w-4 h-4" />
                 </button>
               </div>
+              <Link to={`/funds/${fund._id}`} className="btn btn-secondary w-full mt-2 text-sm">
+                <Wallet className="w-4 h-4" />
+                ملف الصندوق
+              </Link>
             </div>
           ))}
         </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import {
   Building,
@@ -241,6 +242,13 @@ const SubAgencies = () => {
                     خصم شحن
                   </button>
                 </div>
+                <Link
+                  to={`/sub-agencies/${agency._id}`}
+                  className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                >
+                  <Building className="h-4 w-4" />
+                  ملف الوكالة
+                </Link>
               </article>
             );
           })}
