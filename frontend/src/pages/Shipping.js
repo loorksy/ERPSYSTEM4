@@ -29,6 +29,8 @@ const Shipping = () => {
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('newest');
+  const [onlyDebtSales, setOnlyDebtSales] = useState(false);
 
   const [formData, setFormData] = useState({
     transaction_type: shippingType === 'in' ? 'buy' : 'sell',
@@ -92,13 +94,21 @@ const Shipping = () => {
 
   const filteredTransactions = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return transactions.filter((tx) => {
+    const out = transactions.filter((tx) => {
       const matchType = typeFilter === 'all' ? true : tx.transaction_type === typeFilter;
       const notes = (tx.notes || '').toLowerCase();
       const matchQuery = !q || notes.includes(q);
-      return matchType && matchQuery;
+      const matchDebt = onlyDebtSales ? tx.transaction_type === 'sell' && tx.status === 'debt' : true;
+      return matchType && matchQuery && matchDebt;
     });
-  }, [transactions, query, typeFilter]);
+    out.sort((a, b) => {
+      if (sortBy === 'oldest') return new Date(a.created_at) - new Date(b.created_at);
+      if (sortBy === 'value_desc') return (b.total || 0) - (a.total || 0);
+      if (sortBy === 'value_asc') return (a.total || 0) - (b.total || 0);
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
+    return out;
+  }, [transactions, query, typeFilter, onlyDebtSales, sortBy]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -207,6 +217,25 @@ const Shipping = () => {
             </div>
           </section>
 
+
+
+          <section className="card p-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+              <div className="flex items-center gap-2 text-xs text-slate-500"><Filter className="w-3 h-3" />خيارات العرض</div>
+              <div className="flex flex-wrap gap-2">
+                <label className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 text-xs text-slate-700">
+                  <input type="checkbox" checked={onlyDebtSales} onChange={(e) => setOnlyDebtSales(e.target.checked)} />
+                  بيع كدين فقط
+                </label>
+                <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="rounded-xl border border-slate-200 px-3 py-2 text-xs">
+                  <option value="newest">الأحدث</option>
+                  <option value="oldest">الأقدم</option>
+                  <option value="value_desc">القيمة الأعلى</option>
+                  <option value="value_asc">القيمة الأقل</option>
+                </select>
+              </div>
+            </div>
+          </section>
           {loading ? (
             <div className="card p-8 text-center text-slate-500">جاري تحميل عمليات الشحن...</div>
           ) : filteredTransactions.length === 0 ? (

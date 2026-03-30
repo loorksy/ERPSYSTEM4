@@ -15,6 +15,7 @@ const Debts = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
+  const [sortBy, setSortBy] = useState('remaining_desc');
 
   const [formData, setFormData] = useState({
     entity_type: 'company',
@@ -107,7 +108,7 @@ const Debts = () => {
 
   const filteredDebts = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return debts.filter((d) => {
+    const out = debts.filter((d) => {
       const matchesTab =
         activeTab === 'all'
           ? true
@@ -123,7 +124,13 @@ const Debts = () => {
       const matchesQuery = !q || (d.entity_name || '').toLowerCase().includes(q) || (d.notes || '').toLowerCase().includes(q);
       return matchesTab && matchesQuery;
     });
-  }, [debts, activeTab, query]);
+    out.sort((a,b)=>{
+      if (sortBy === 'remaining_asc') return (a.remaining||0)-(b.remaining||0);
+      if (sortBy === 'name') return String(a.entity_name||'').localeCompare(String(b.entity_name||''),'ar');
+      return (b.remaining||0)-(a.remaining||0);
+    });
+    return out;
+  }, [debts, activeTab, query, sortBy]);
 
   return (
     <div className="space-y-6" data-testid="debts-page" dir="rtl">
@@ -164,6 +171,15 @@ const Debts = () => {
 
       <section className="card p-4">
         <div className="flex flex-col md:flex-row md:items-center gap-3">
+          <div className="flex items-center gap-2 text-xs text-slate-600 rounded-xl border border-slate-200 px-3 py-2">
+            <Filter className="h-3 w-3" />
+            ترتيب:
+            <select value={sortBy} onChange={(e)=>setSortBy(e.target.value)} className="rounded-lg border border-slate-200 px-2 py-1 text-xs">
+              <option value="remaining_desc">المتبقي الأعلى</option>
+              <option value="remaining_asc">المتبقي الأقل</option>
+              <option value="name">الاسم</option>
+            </select>
+          </div>
           <div className="relative md:flex-1">
             <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <input value={query} onChange={(e) => setQuery(e.target.value)} className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-9 pl-3 text-sm" placeholder="بحث بالجهة أو الملاحظات" />

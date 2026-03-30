@@ -26,6 +26,8 @@ const Funds = () => {
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [historyFilter, setHistoryFilter] = useState('all');
   const [search, setSearch] = useState('');
+  const [hideMainFund, setHideMainFund] = useState(false);
+  const [negativeOnly, setNegativeOnly] = useState(false);
 
   const [fundForm, setFundForm] = useState({
     name: '',
@@ -65,9 +67,13 @@ const Funds = () => {
 
   const filteredFunds = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return funds;
-    return funds.filter((fund) => (fund.name || '').toLowerCase().includes(q) || (fund.code || '').toLowerCase().includes(q));
-  }, [funds, search]);
+    return funds.filter((fund) => {
+      const matchesSearch = !q || (fund.name || '').toLowerCase().includes(q) || (fund.code || '').toLowerCase().includes(q);
+      const matchesMain = hideMainFund ? !fund.is_main : true;
+      const matchesNegative = negativeOnly ? Number(fund.balance || 0) < 0 : true;
+      return matchesSearch && matchesMain && matchesNegative;
+    });
+  }, [funds, search, hideMainFund, negativeOnly]);
 
   const filteredTransactions = useMemo(() => {
     if (historyFilter === 'all') return transactions;
@@ -182,6 +188,15 @@ const Funds = () => {
             placeholder="بحث باسم الصندوق أو الكود"
             className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pr-9 pl-3 text-sm text-slate-700"
           />
+        </div>
+      </section>
+
+      <section className="card p-4">
+        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+          <Filter className="w-3 h-3" />
+          خيارات العرض:
+          <label className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-1"><input type="checkbox" checked={hideMainFund} onChange={(e) => setHideMainFund(e.target.checked)} /> إخفاء الرئيسي</label>
+          <label className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-1"><input type="checkbox" checked={negativeOnly} onChange={(e) => setNegativeOnly(e.target.checked)} /> الرصيد السالب فقط</label>
         </div>
       </section>
 
