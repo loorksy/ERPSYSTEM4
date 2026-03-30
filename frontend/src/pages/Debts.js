@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useData } from '../context/DataContext';
+import { useSearchParams } from 'react-router-dom';
 import { Receipt, Plus, X, CreditCard, HandCoins } from 'lucide-react';
 
 const Debts = () => {
+  const [searchParams] = useSearchParams();
   const { activeCycle, createDebt, payDebt, transferCompanies, funds, subAgencies, api } = useData();
   const [showModal, setShowModal] = useState(false);
   const [showPayModal, setShowPayModal] = useState(false);
@@ -41,6 +43,12 @@ const Debts = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (searchParams.get('action') === 'add') {
+      setShowModal(true);
+    }
+  }, [searchParams]);
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('ar-SA', {

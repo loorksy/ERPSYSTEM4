@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import { Truck, Plus, X, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
 
 const TransferCompanies = () => {
+  const [searchParams] = useSearchParams();
   const { transferCompanies, createTransferCompany, companyDisburse } = useData();
   const [showModal, setShowModal] = useState(false);
   const [showDisburseModal, setShowDisburseModal] = useState(false);
@@ -30,6 +33,13 @@ const TransferCompanies = () => {
     setRecordAsDebt(false);
     setNotes('');
   };
+
+  useEffect(() => {
+    if (searchParams.get('action') === 'disburse' && transferCompanies.length > 0) {
+      setSelectedCompany(transferCompanies[0]);
+      setShowDisburseModal(true);
+    }
+  }, [searchParams, transferCompanies]);
 
   return (
     <div className="space-y-6" data-testid="transfer-companies-page">
@@ -67,6 +77,10 @@ const TransferCompanies = () => {
                 <ArrowUpCircle className="w-4 h-4" />
                 صرف
               </button>
+              <Link to={`/transfer-companies/${company._id}`} className="btn btn-secondary w-full mt-2">
+                <Truck className="w-4 h-4" />
+                ملف الشركة
+              </Link>
             </div>
           ))}
         </div>

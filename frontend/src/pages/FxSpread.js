@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useData } from '../context/DataContext';
+import { useSearchParams } from 'react-router-dom';
 import { TrendingUp, Plus, X } from 'lucide-react';
 
 const FxSpread = () => {
+  const [searchParams] = useSearchParams();
   const { activeCycle, createFxSpread, api } = useData();
   const [showModal, setShowModal] = useState(false);
   const [spreads, setSpreads] = useState([]);
@@ -42,6 +44,12 @@ const FxSpread = () => {
       setLoading(false);
     }
   }, [activeCycle]);
+
+  useEffect(() => {
+    if (searchParams.get('action') === 'add' && activeCycle) {
+      setShowModal(true);
+    }
+  }, [searchParams, activeCycle]);
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('ar-SA', {
