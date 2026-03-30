@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useData } from '../context/DataContext';
+import { useSearchParams } from 'react-router-dom';
 import { DollarSign, Plus, X, Trash2 } from 'lucide-react';
 
 const Expenses = () => {
+  const [searchParams] = useSearchParams();
   const { activeCycle, createExpense, api } = useData();
   const [showModal, setShowModal] = useState(false);
   const [expenses, setExpenses] = useState([]);
@@ -38,6 +40,12 @@ const Expenses = () => {
       setLoading(false);
     }
   }, [activeCycle]);
+
+  useEffect(() => {
+    if (searchParams.get('action') === 'add' && activeCycle) {
+      setShowModal(true);
+    }
+  }, [searchParams, activeCycle]);
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('ar-SA', {

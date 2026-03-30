@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useData } from '../context/DataContext';
+import { Link } from 'react-router-dom';
 import { Coins, TrendingUp, Package, CheckCircle, DollarSign } from 'lucide-react';
 
 const ProfitSources = () => {
@@ -132,6 +133,7 @@ const ProfitSources = () => {
                       <th>المصدر</th>
                       <th>المبلغ</th>
                       <th>ملاحظات</th>
+                      <th>ملف</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -141,6 +143,11 @@ const ProfitSources = () => {
                         <td><span className="badge badge-success">{getSourceLabel(profit.source_type)}</span></td>
                         <td className="font-bold text-emerald-600">+{formatCurrency(profit.amount)}</td>
                         <td className="text-slate-500">{profit.notes || '-'}</td>
+                        <td>
+                          <Link to={`/profit-sources/${profit.source_type}/detail`} className="text-primary-700 text-xs font-semibold hover:underline">
+                            عرض التفاصيل
+                          </Link>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

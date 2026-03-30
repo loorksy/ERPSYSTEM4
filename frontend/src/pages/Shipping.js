@@ -6,17 +6,21 @@ import { Package, Plus, X, TrendingUp, TrendingDown } from 'lucide-react';
 const Shipping = () => {
   const { activeCycle, createShippingTransaction, api } = useData();
   const [searchParams] = useSearchParams();
+  const fabType = searchParams.get('fab');
+  const typeParam = searchParams.get('type');
+  const shippingType = fabType || typeParam;
+  const qaFocus = searchParams.get('qaFocus');
   const [showModal, setShowModal] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   
   const [formData, setFormData] = useState({
-    transaction_type: searchParams.get('type') === 'in' ? 'buy' : 'sell',
+    transaction_type: shippingType === 'in' ? 'buy' : 'sell',
     quantity: '',
     price: '',
     notes: '',
-    swap_salary: false,
+    swap_salary: qaFocus === 'swap',
     employee_id: ''
   });
 
@@ -42,6 +46,18 @@ const Shipping = () => {
       setLoading(false);
     }
   }, [activeCycle]);
+
+  useEffect(() => {
+    if (!activeCycle) return;
+    if (shippingType === 'in' || shippingType === 'out') {
+      setFormData((prev) => ({
+        ...prev,
+        transaction_type: shippingType === 'in' ? 'buy' : 'sell',
+        swap_salary: qaFocus === 'swap'
+      }));
+      setShowModal(true);
+    }
+  }, [activeCycle, qaFocus, shippingType]);
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('ar-SA', {
