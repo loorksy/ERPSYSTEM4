@@ -3,6 +3,9 @@ import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL || '';
 
+// Demo mode - runs frontend only without backend
+const DEMO_MODE = !API_URL || API_URL === '';
+
 const AuthContext = createContext(null);
 
 export const useAuth = () => {
@@ -11,6 +14,15 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
+};
+
+// Demo user data
+const DEMO_USER = {
+  id: 1,
+  email: 'demo@lorkerp.com',
+  name: 'مستخدم تجريبي',
+  role: 'admin',
+  permissions: ['all']
 };
 
 // Create axios instance with auth interceptor
@@ -36,6 +48,16 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAuth = async () => {
+    // Demo mode - check localStorage for demo session
+    if (DEMO_MODE) {
+      const demoSession = localStorage.getItem('demo_session');
+      if (demoSession) {
+        setUser(DEMO_USER);
+      }
+      setLoading(false);
+      return;
+    }
+
     const token = localStorage.getItem('access_token');
     if (!token) {
       setLoading(false);
@@ -56,6 +78,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (email, password) => {
+    // Demo mode - accept any credentials
+    if (DEMO_MODE) {
+      localStorage.setItem('demo_session', 'true');
+      setUser(DEMO_USER);
+      return DEMO_USER;
+    }
+
     const response = await axios.post(`${API_URL}/api/auth/login`, { email, password });
     const { access_token, refresh_token, ...userData } = response.data;
     
@@ -68,6 +97,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (email, password, name) => {
+    // Demo mode
+    if (DEMO_MODE) {
+      localStorage.setItem('demo_session', 'true');
+      setUser({ ...DEMO_USER, email, name });
+      return { ...DEMO_USER, email, name };
+    }
+
     const response = await axios.post(`${API_URL}/api/auth/register`, { email, password, name });
     const { access_token, refresh_token, ...userData } = response.data;
     
@@ -80,6 +116,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
+    // Demo mode
+    if (DEMO_MODE) {
+      localStorage.removeItem('demo_session');
+      setUser(null);
+      return;
+    }
+
     try {
       await api.post('/api/auth/logout');
     } catch (error) {
@@ -98,7 +141,8 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
-    checkAuth
+    checkAuth,
+    isDemo: DEMO_MODE
   };
 
   return (
