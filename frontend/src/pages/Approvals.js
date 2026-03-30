@@ -480,23 +480,24 @@ const Approvals = () => {
 
               {/* Review Step */}
               {bulkStep === 'review' && stagingItems.length > 0 && (
-                <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-                  <div className="p-3 sm:p-5 border-b border-slate-100 flex flex-wrap gap-3 sm:gap-4 justify-between items-center bg-slate-50/50">
+                <div className="card overflow-hidden">
+                  <div className="p-4 sm:p-5 border-b border-slate-200 flex flex-wrap gap-3 sm:gap-4 justify-between items-center bg-slate-50">
                     <div>
-                      <h3 className="text-sm sm:text-base font-bold text-slate-800">مراجعة البيانات</h3>
+                      <h3 className="text-base font-bold text-slate-900">مراجعة البيانات</h3>
                       <p className="text-xs text-slate-500 mt-0.5">تأكد من صحة الحقول قبل الحفظ</p>
                     </div>
-                    <span className="bg-emerald-100 text-emerald-700 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 border border-emerald-200 shadow-sm">
-                      <CheckCircle size={14} />
+                    <span className="badge badge-success">
+                      <CheckCircle size={14} className="ml-1" />
                       {stagingItems.length} صف
                     </span>
                   </div>
 
-                  <div className="px-3 sm:px-5 py-2.5 sm:py-3 border-b border-slate-100 bg-white">
+                  <div className="px-4 sm:px-5 py-3 border-b border-slate-200 bg-white">
+                    <label className="label">نوع الدين</label>
                     <select
                       value={bulkReviewKind}
                       onChange={(e) => setBulkReviewKind(e.target.value)}
-                      className="w-full px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 text-xs sm:text-sm focus:bg-white focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 outline-none"
+                      className="input max-w-xl"
                     >
                       <option value="debt_receivable">لنا — دين على المعتمد</option>
                       <option value="debt_payable">علينا — صندوق + مطلوب دفع</option>
@@ -506,36 +507,33 @@ const Approvals = () => {
 
                   {/* Staging Table - Desktop */}
                   <div className="hidden sm:block overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead className="bg-slate-50 border-b border-slate-200 sticky top-0">
+                    <table className="table">
+                      <thead>
                         <tr>
-                          <th className="p-3 text-xs font-bold text-center text-slate-600">#</th>
-                          <th className="p-3 text-xs font-bold text-right text-slate-600">المعتمد</th>
-                          <th className="p-3 text-xs font-bold text-right text-slate-600">المبلغ</th>
+                          <th className="text-center">#</th>
+                          <th>المعتمد</th>
+                          <th>المبلغ</th>
                           {bulkReviewKind !== 'debt_receivable' && (
-                            <th className="p-3 text-xs font-bold text-center text-slate-800">خصم %</th>
+                            <th className="text-center">خصم %</th>
                           )}
-                          <th className="p-3 text-xs font-bold text-center text-slate-800">إجراء</th>
+                          <th className="text-center">إجراء</th>
                         </tr>
                       </thead>
                       <tbody>
                         {stagingItems.map((item, index) => (
-                          <tr
-                            key={index}
-                            className="border-b border-slate-100 hover:bg-slate-50/50 transition"
-                          >
-                            <td className="p-3 text-center text-xs text-slate-400">{item.lineIndex}</td>
-                            <td className="p-3">
-                              <div className="font-bold text-slate-900 text-sm">{item.name}</div>
+                          <tr key={index}>
+                            <td className="text-center text-slate-400">{item.lineIndex}</td>
+                            <td>
+                              <div className="font-bold text-slate-900">{item.name}</div>
                               {item.code && (
                                 <div className="text-xs font-mono text-slate-500 mt-0.5">{item.code}</div>
                               )}
                             </td>
-                            <td className="p-3 font-bold text-indigo-700 tabular-nums">
+                            <td className="font-bold text-primary-600 tabular-nums">
                               {formatMoney(item.amount)}
                             </td>
                             {bulkReviewKind !== 'debt_receivable' && (
-                              <td className="p-3">
+                              <td>
                                 <input
                                   type="number"
                                   min="0"
@@ -547,18 +545,18 @@ const Approvals = () => {
                                     newItems[index].discountPct = e.target.value;
                                     setStagingItems(newItems);
                                   }}
-                                  className="w-24 px-3 py-1.5 rounded-lg border border-slate-200 text-sm text-center focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 outline-none"
+                                  className="w-24 px-3 py-1.5 rounded-lg border border-slate-300 text-sm text-center focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
                                   placeholder="—"
                                 />
                               </td>
                             )}
-                            <td className="p-3 text-center">
+                            <td className="text-center">
                               <button
                                 onClick={() => handleRemoveStagingRow(index)}
-                                className="w-8 h-8 inline-flex items-center justify-center rounded-lg bg-red-600 text-white hover:bg-red-700 transition shadow-sm"
+                                className="btn-ghost p-2 rounded-lg text-red-600 hover:bg-red-50"
                                 title="حذف الصف"
                               >
-                                <Trash2 size={14} />
+                                <Trash2 size={16} />
                               </button>
                             </td>
                           </tr>
@@ -621,18 +619,18 @@ const Approvals = () => {
                   </div>
 
                   {/* Footer Buttons */}
-                  <div className="border-t border-slate-200 bg-gradient-to-b from-slate-50/95 to-white px-3 sm:px-6 py-3 sm:py-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 w-full max-w-2xl mx-auto">
+                  <div className="border-t border-slate-200 bg-slate-50 px-4 sm:px-6 py-4">
+                    <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3">
                       <button
                         onClick={handleClearBulkStaging}
-                        className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl border border-slate-300 text-slate-700 text-sm font-bold hover:bg-slate-100 transition flex items-center justify-center gap-2"
+                        className="btn btn-secondary flex-1"
                       >
                         <X size={18} />
                         تراجع وإلغاء
                       </button>
                       <button
                         onClick={handleCommitBulk}
-                        className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-emerald-600 text-white text-sm font-bold shadow-md hover:bg-emerald-700 hover:shadow-lg hover:-translate-y-0.5 transition flex items-center justify-center gap-2"
+                        className="btn btn-success flex-1"
                       >
                         <Save size={18} />
                         حفظ واعتماد
@@ -648,50 +646,43 @@ const Approvals = () => {
 
       {/* Delivery Modal */}
       {showDeliveryModal && (
-        <div className="fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
-          <div className="bg-white w-full sm:max-w-md sm:rounded-2xl rounded-t-3xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
-            <div className="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white shrink-0 sm:rounded-t-2xl rounded-t-3xl">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-                  <HandCoins size={20} />
+        <div className="modal-overlay" onClick={() => setShowDeliveryModal(false)}>
+          <div className="modal-content w-full max-w-md mx-4" onClick={(e) => e.stopPropagation()}>
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-3">
+                  <div className="stat-icon bg-emerald-100">
+                    <HandCoins className="text-emerald-600" size={20} />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-slate-900">تسليم معتمدين</h2>
+                    <p className="text-xs text-slate-500 mt-0.5">اختر الدورة، حدّد ذوي الرصيد، ثم نفّذ التسليم</p>
+                  </div>
                 </div>
+                <button onClick={() => setShowDeliveryModal(false)} className="btn-ghost p-2 rounded-lg">
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="space-y-4">
                 <div>
-                  <h4 className="text-base sm:text-lg font-bold text-slate-800">تسليم معتمدين</h4>
-                  <p className="text-xs text-slate-500 mt-0.5">اختر الدورة، حدّد ذوي الرصيد، ثم نفّذ التسليم</p>
+                  <label className="label">دورة مالية</label>
+                  <select className="input">
+                    <option value="">— اختر الدورة —</option>
+                  </select>
                 </div>
+                <p className="text-sm text-slate-400 text-center py-8">قريباً: قائمة المعتمدين للتسليم</p>
               </div>
-              <button
-                onClick={() => setShowDeliveryModal(false)}
-                className="text-slate-400 hover:text-slate-600 hover:bg-slate-100 p-2 rounded-xl transition"
-              >
-                <X size={20} />
-              </button>
-            </div>
 
-            <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-50/30">
-              <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm mb-4">
-                <label className="block text-xs font-semibold text-slate-600 mb-2">دورة مالية</label>
-                <select className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 text-sm focus:bg-white focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 outline-none">
-                  <option value="">— دورة —</option>
-                </select>
+              <div className="flex flex-col-reverse sm:flex-row gap-2 pt-4">
+                <button onClick={() => setShowDeliveryModal(false)} className="btn btn-secondary flex-1">
+                  إلغاء
+                </button>
+                <button onClick={() => alert('تسليم')} className="btn btn-success flex-1">
+                  <CheckCircle size={18} />
+                  تسليم
+                </button>
               </div>
-              <p className="text-sm text-slate-600 text-center py-8">قريباً: قائمة المعتمدين للتسليم</p>
-            </div>
-
-            <div className="px-3 sm:px-6 py-3 sm:py-4 border-t border-slate-100 bg-slate-50/50 flex gap-2 sm:gap-3 shrink-0">
-              <button
-                onClick={() => setShowDeliveryModal(false)}
-                className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl border border-slate-300 text-slate-700 text-sm font-bold hover:bg-slate-100 transition"
-              >
-                إلغاء
-              </button>
-              <button
-                onClick={() => alert('تسليم')}
-                className="flex-1 px-4 sm:px-8 py-2.5 sm:py-3 rounded-xl bg-emerald-600 text-white text-sm font-bold shadow-md hover:bg-emerald-700 transition flex items-center justify-center gap-2"
-              >
-                <CheckCircle size={18} />
-                تسليم
-              </button>
             </div>
           </div>
         </div>
@@ -699,82 +690,94 @@ const Approvals = () => {
 
       {/* Detail Modal */}
       {showDetailModal && selectedApproval && (
-        <div className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6">
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <h4 className="text-lg font-bold text-slate-900">{selectedApproval.name}</h4>
-                <p className="text-sky-600 font-semibold mt-1 tabular-nums">
-                  الصافي: {formatMoney(selectedApproval.balance)}
-                </p>
-              </div>
-              <button
-                onClick={() => setShowDetailModal(false)}
-                className="text-slate-400 hover:text-slate-600 p-2"
-              >
-                <X size={20} />
-              </button>
-            </div>
-            <div className="flex gap-2 mb-4">
-              <button 
-                onClick={() => setShowAddAmountPanel(!showAddAmountPanel)}
-                className="flex-1 py-2 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition"
-              >
-                إضافة مبلغ
-              </button>
-              <button 
-                onClick={() => setShowTransferPanel(!showTransferPanel)}
-                className="flex-1 py-2 rounded-xl bg-slate-600 text-white text-sm font-semibold hover:bg-slate-700 transition"
-              >
-                تحويل
-              </button>
-              <button className="py-2 px-3 rounded-xl bg-amber-100 text-amber-800 text-sm font-semibold hover:bg-amber-200 transition">
-                تثبيت
-              </button>
-            </div>
-
-            {showAddAmountPanel && (
-              <div className="space-y-2 mb-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
-                <p className="text-xs font-semibold text-slate-600 mb-2">إضافة مبلغ للمعتمد</p>
-                <select className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white outline-none">
-                  <option value="debt_receivable">لنا — دين على المعتمد (بدون صندوق)</option>
-                  <option value="debt_payable">علينا — صندوق رئيسي + مطلوب دفع</option>
-                </select>
-                <input
-                  type="number"
-                  step="0.01"
-                  placeholder="المبلغ"
-                  className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white outline-none"
-                />
-                <button className="w-full py-2 rounded-lg bg-sky-500 text-white text-sm font-semibold hover:bg-sky-600 transition">
-                  تسجيل
+        <div className="modal-overlay" onClick={() => setShowDetailModal(false)}>
+          <div className="modal-content w-full max-w-lg mx-4" onClick={(e) => e.stopPropagation()}>
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-5">
+                <div>
+                  <h2 className="text-xl font-bold text-slate-900">{selectedApproval.name}</h2>
+                  <p className="text-primary-600 font-semibold mt-1 tabular-nums text-lg">
+                    الصافي: {formatMoney(selectedApproval.balance)}
+                  </p>
+                </div>
+                <button onClick={() => setShowDetailModal(false)} className="btn-ghost p-2 rounded-lg">
+                  <X size={20} />
                 </button>
               </div>
-            )}
-
-            {showTransferPanel && (
-              <div className="space-y-2 mb-4 p-4 rounded-xl bg-slate-50 border border-slate-200">
-                <p className="text-xs font-semibold text-slate-600 mb-2">تحويل</p>
-                <select className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white outline-none">
-                  <option>تسليم يدوي</option>
-                  <option>تحويل صندوق</option>
-                  <option>تحويل (شركة)</option>
-                </select>
-                <input
-                  type="number"
-                  step="0.01"
-                  placeholder="المبلغ"
-                  className="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white outline-none"
-                />
-                <button className="w-full py-2 rounded-lg bg-sky-500 text-white text-sm font-semibold hover:bg-sky-600 transition">
-                  تنفيذ
+              
+              <div className="flex gap-2 mb-5">
+                <button 
+                  onClick={() => setShowAddAmountPanel(!showAddAmountPanel)}
+                  className="btn btn-success flex-1"
+                >
+                  إضافة مبلغ
+                </button>
+                <button 
+                  onClick={() => setShowTransferPanel(!showTransferPanel)}
+                  className="btn btn-secondary flex-1"
+                >
+                  تحويل
+                </button>
+                <button className="btn btn-ghost px-3">
+                  <Star size={18} />
                 </button>
               </div>
-            )}
 
-            <h5 className="font-bold text-slate-800 mb-2">السجل</h5>
-            <div className="text-sm text-slate-400 text-center py-4">
-              <p>لا توجد سجلات</p>
+              {showAddAmountPanel && (
+                <div className="card p-4 mb-4 space-y-3">
+                  <p className="text-sm font-semibold text-slate-700">إضافة مبلغ للمعتمد</p>
+                  <div>
+                    <label className="label">نوع العملية</label>
+                    <select className="input">
+                      <option value="debt_receivable">لنا — دين على المعتمد (بدون صندوق)</option>
+                      <option value="debt_payable">علينا — صندوق رئيسي + مطلوب دفع</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="label">المبلغ</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      placeholder="0.00"
+                      className="input"
+                    />
+                  </div>
+                  <button className="btn btn-primary w-full">
+                    تسجيل
+                  </button>
+                </div>
+              )}
+
+              {showTransferPanel && (
+                <div className="card p-4 mb-4 space-y-3">
+                  <p className="text-sm font-semibold text-slate-700">تحويل</p>
+                  <div>
+                    <label className="label">نوع التحويل</label>
+                    <select className="input">
+                      <option>تسليم يدوي</option>
+                      <option>تحويل صندوق</option>
+                      <option>تحويل (شركة)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="label">المبلغ</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      placeholder="0.00"
+                      className="input"
+                    />
+                  </div>
+                  <button className="btn btn-primary w-full">
+                    تنفيذ
+                  </button>
+                </div>
+              )}
+
+              <h3 className="font-bold text-slate-900 mb-3">السجل</h3>
+              <div className="text-sm text-slate-400 text-center py-8 card">
+                <p>لا توجد سجلات</p>
+              </div>
             </div>
           </div>
         </div>
