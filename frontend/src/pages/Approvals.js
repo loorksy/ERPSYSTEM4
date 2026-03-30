@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, Plus, Upload, FileSpreadsheet, Trash2, X, Cloud, TrendingUp, Save, ArrowLeft, Info, HandCoins } from 'lucide-react';
+import { CheckCircle, Plus, Upload, FileSpreadsheet, Trash2, X, Cloud, TrendingUp, Save, ArrowLeft, Info, HandCoins, Star } from 'lucide-react';
 
 const Approvals = () => {
   const [approvals, setApprovals] = useState([]);
@@ -24,16 +24,14 @@ const Approvals = () => {
   const [showAddAmountPanel, setShowAddAmountPanel] = useState(false);
   const [showTransferPanel, setShowTransferPanel] = useState(false);
 
-  // Colors for cards
-  const cardColors = [
-    'linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 50%, #a5b4fc 100%)',
-    'linear-gradient(135deg, #d1fae5 0%, #a7f3d0 50%, #6ee7b7 100%)',
-    'linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fcd34d 100%)',
-    'linear-gradient(135deg, #fce7f3 0%, #fbcfe8 50%, #f9a8d4 100%)',
-    'linear-gradient(135deg, #cffafe 0%, #a5f3fc 50%, #67e8f9 100%)',
-    'linear-gradient(135deg, #ede9fe 0%, #ddd6fe 50%, #c4b5fd 100%)',
-    'linear-gradient(135deg, #fed7aa 0%, #fdba74 50%, #fb923c 100%)',
-    'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 50%, #93c5fd 100%)',
+  // Gradients matching Sheet.js theme
+  const gradients = [
+    'from-blue-500 to-cyan-500',
+    'from-emerald-500 to-teal-500',
+    'from-violet-500 to-purple-500',
+    'from-amber-500 to-orange-500',
+    'from-pink-500 to-rose-500',
+    'from-indigo-500 to-blue-500',
   ];
 
   // Mock data
@@ -160,46 +158,30 @@ const Approvals = () => {
 
   return (
     <div className="space-y-6 animate-fade-in" dir="rtl" data-testid="approvals-page">
-      {/* Header Card */}
-      <div className="rounded-2xl border border-slate-200/90 bg-white shadow-sm overflow-hidden">
-        <div className="relative overflow-hidden border-b border-slate-200/80 bg-gradient-to-br from-violet-50/90 via-white to-slate-50 px-4 py-5 sm:px-7 sm:py-6">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_100%_0%,rgba(139,92,246,0.08),transparent)] pointer-events-none"></div>
-          <div className="relative flex items-start gap-3 sm:gap-4">
-            <div className="flex h-11 w-11 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-sky-700 text-white shadow-md">
-              <CheckCircle size={24} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs font-semibold text-violet-700 mb-0.5">المعتمدون والتسليم</p>
-              <h1 className="text-lg sm:text-2xl font-bold text-slate-900 tracking-tight">الاعتمادات</h1>
-              <p className="text-sm text-slate-600 mt-1 leading-relaxed">إدارة المعتمدين، رفع الأرصدة، وتسليم العمليات.</p>
-            </div>
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="stat-icon bg-primary-100">
+            <CheckCircle className="text-primary-600" size={24} />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900">الاعتمادات</h1>
+            <p className="text-sm text-slate-500 mt-0.5">إدارة المعتمدين، رفع الأرصدة، وتسليم العمليات</p>
           </div>
         </div>
-        
-        {/* Action Buttons */}
-        <div className="border-b border-slate-100 bg-slate-50/95 px-4 py-4 sm:px-6 sm:py-4">
-          <p className="text-xs font-semibold text-slate-500 mb-3 sm:hidden">إجراءات</p>
-          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">
-            <button 
-              onClick={() => setShowBulkModal(true)}
-              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-700 text-white text-sm font-semibold shadow-md hover:bg-slate-800 active:scale-[0.99] transition text-center"
-            >
-              رفع أرصدة
-            </button>
-            <button 
-              onClick={() => setShowDeliveryModal(true)}
-              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-semibold shadow-md hover:bg-emerald-700 active:scale-[0.99] transition text-center"
-            >
-              تسليم
-            </button>
-            <button 
-              onClick={() => setShowAddModal(true)}
-              className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold shadow-md hover:from-violet-700 hover:to-indigo-700 active:scale-[0.99] transition"
-            >
-              <Plus size={18} className="ml-2" />
-              إضافة معتمد
-            </button>
-          </div>
+        <div className="flex flex-wrap gap-2">
+          <button onClick={() => setShowBulkModal(true)} className="btn btn-secondary">
+            <Upload size={18} />
+            <span>رفع أرصدة</span>
+          </button>
+          <button onClick={() => setShowDeliveryModal(true)} className="btn btn-success">
+            <HandCoins size={18} />
+            <span>تسليم</span>
+          </button>
+          <button onClick={() => setShowAddModal(true)} className="btn btn-primary">
+            <Plus size={18} />
+            <span>إضافة معتمد</span>
+          </button>
         </div>
       </div>
 
@@ -209,7 +191,7 @@ const Approvals = () => {
           <div className="empty-state">
             <CheckCircle className="empty-state-icon" />
             <p className="empty-state-title">لا يوجد معتمدون</p>
-            <p className="empty-state-text">أضف معتمداً من زر «إضافة معتمد» أو استورد أرصدة من «رفع أرصدة».</p>
+            <p className="empty-state-text">أضف معتمداً من زر «إضافة معتمد» أو استورد أرصدة من «رفع أرصدة»</p>
             <button onClick={() => setShowAddModal(true)} className="btn btn-primary mt-4">
               <Plus size={18} />
               إضافة أول معتمد
@@ -219,26 +201,41 @@ const Approvals = () => {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {approvals.map((approval, index) => {
-            const gradient = cardColors[index % cardColors.length];
-            const textColor = approval.balance > 0 ? '#047857' : approval.balance < 0 ? '#b91c1c' : '#64748b';
+            const gradient = gradients[index % gradients.length];
             
             return (
               <div
                 key={approval.id}
                 onClick={() => handleOpenDetail(approval)}
-                className="relative p-5 rounded-xl cursor-pointer transition-all hover:shadow-lg hover:-translate-y-1 border border-white/55 shadow-sm"
-                style={{ background: gradient }}
+                className="card card-hover group overflow-hidden cursor-pointer"
               >
-                {approval.pinned && (
-                  <div className="absolute top-2 right-2 text-amber-600">
-                    <TrendingUp size={16} />
+                <div className={`h-1.5 bg-gradient-to-r ${gradient}`}></div>
+                <div className="p-5">
+                  <div className="flex items-start justify-between gap-3 mb-4">
+                    <h3 className="font-bold text-slate-900 text-lg flex-1">{approval.name}</h3>
+                    {approval.pinned && (
+                      <Star size={18} className="text-amber-500 fill-amber-500" />
+                    )}
                   </div>
-                )}
-                <h3 className="font-bold text-slate-900 text-base mb-2">{approval.name}</h3>
-                <p className="text-sm font-mono text-slate-600 mb-3">{approval.code || '—'}</p>
-                <p className="text-sm font-semibold tabular-nums" style={{ color: textColor }}>
-                  رصيد: {formatMoney(approval.balance)}
-                </p>
+                  
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2 text-slate-600">
+                      <span className="text-xs text-slate-500">الكود:</span>
+                      <span className="font-mono font-medium">{approval.code || '—'}</span>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-slate-500">الرصيد:</span>
+                      <span className={`font-bold tabular-nums ${
+                        approval.balance > 0 ? 'text-emerald-600' : 
+                        approval.balance < 0 ? 'text-red-600' : 
+                        'text-slate-500'
+                      }`}>
+                        {formatMoney(approval.balance)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
             );
           })}
@@ -247,55 +244,56 @@ const Approvals = () => {
 
       {/* Add Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border border-slate-100 shadow-xl p-6 max-w-md w-full">
-            <div className="flex items-start gap-3 mb-5">
-              <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-sky-50 text-sky-600 border border-slate-100">
-                <Plus size={20} />
+        <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
+          <div className="modal-content w-full max-w-md mx-4" onClick={(e) => e.stopPropagation()}>
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-3">
+                  <div className="stat-icon bg-primary-100">
+                    <Plus className="text-primary-600" size={20} />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-slate-900">معتمد جديد</h2>
+                    <p className="text-xs text-slate-500 mt-0.5">أدخل الاسم والكود اختيارياً</p>
+                  </div>
+                </div>
+                <button onClick={() => setShowAddModal(false)} className="btn-ghost p-2 rounded-lg">
+                  <X size={20} />
+                </button>
               </div>
-              <div>
-                <h4 className="text-lg font-bold text-slate-900">معتمد جديد</h4>
-                <p className="text-xs text-slate-500 mt-0.5">أدخل الاسم والكود اختيارياً</p>
-              </div>
+              
+              <form onSubmit={handleAddApproval} className="space-y-4">
+                <div>
+                  <label className="label">الاسم</label>
+                  <input
+                    type="text"
+                    value={addFormData.name}
+                    onChange={(e) => setAddFormData({ ...addFormData, name: e.target.value })}
+                    placeholder="أدخل اسم المعتمد"
+                    className="input"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="label">الكود</label>
+                  <input
+                    type="text"
+                    value={addFormData.code}
+                    onChange={(e) => setAddFormData({ ...addFormData, code: e.target.value })}
+                    placeholder="أدخل كود المعتمد (اختياري)"
+                    className="input"
+                  />
+                </div>
+                <div className="flex flex-col-reverse sm:flex-row gap-2 pt-2">
+                  <button type="button" onClick={() => setShowAddModal(false)} className="btn btn-secondary flex-1">
+                    إلغاء
+                  </button>
+                  <button type="submit" className="btn btn-primary flex-1">
+                    حفظ
+                  </button>
+                </div>
+              </form>
             </div>
-            <form onSubmit={handleAddApproval} className="space-y-3">
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">الاسم</label>
-                <input
-                  type="text"
-                  value={addFormData.name}
-                  onChange={(e) => setAddFormData({ ...addFormData, name: e.target.value })}
-                  placeholder="الاسم"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 focus:ring-2 focus:ring-sky-500/30 focus:border-sky-400 outline-none"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">الكود</label>
-                <input
-                  type="text"
-                  value={addFormData.code}
-                  onChange={(e) => setAddFormData({ ...addFormData, code: e.target.value })}
-                  placeholder="الكود"
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 focus:ring-2 focus:ring-sky-500/30 focus:border-sky-400 outline-none"
-                />
-              </div>
-              <div className="flex flex-col-reverse sm:flex-row gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="w-full sm:w-auto px-5 py-3 rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold hover:bg-slate-50 transition"
-                >
-                  إلغاء
-                </button>
-                <button
-                  type="submit"
-                  className="w-full sm:flex-1 py-3 rounded-xl bg-sky-500 text-white font-bold shadow-sm hover:bg-sky-600 transition"
-                >
-                  حفظ
-                </button>
-              </div>
-            </form>
           </div>
         </div>
       )}
@@ -525,7 +523,6 @@ const Approvals = () => {
                           <tr
                             key={index}
                             className="border-b border-slate-100 hover:bg-slate-50/50 transition"
-                            style={{ background: cardColors[index % cardColors.length] }}
                           >
                             <td className="p-3 text-center text-xs text-slate-400">{item.lineIndex}</td>
                             <td className="p-3">
@@ -575,8 +572,7 @@ const Approvals = () => {
                     {stagingItems.map((item, index) => (
                       <div
                         key={index}
-                        className="p-3 rounded-xl border border-white/55 shadow-sm"
-                        style={{ background: cardColors[index % cardColors.length] }}
+                        className="p-3 rounded-xl border border-slate-200 bg-slate-50 shadow-sm"
                       >
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-xs bg-white/55 border border-white/65 text-slate-600 px-2 py-0.5 rounded font-bold">
