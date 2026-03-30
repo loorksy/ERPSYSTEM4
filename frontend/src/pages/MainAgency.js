@@ -1,131 +1,165 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
-import { Building2, Wallet, TrendingUp, TrendingDown, Users, Package } from 'lucide-react';
+import {
+  Building2,
+  Wallet,
+  Users,
+  TrendingUp,
+  TrendingDown,
+  Package,
+  ArrowLeft,
+  Receipt,
+} from 'lucide-react';
 
 const MainAgency = () => {
   const { dashboardSummary, funds, subAgencies } = useData();
 
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('ar-SA', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(value || 0);
-  };
+  const formatCurrency = (value) =>
+    new Intl.NumberFormat('ar-SA', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+    }).format(Number(value) || 0);
 
-  const mainFund = funds.find(f => f.is_main);
-  const totalAgenciesBalance = subAgencies.reduce((sum, a) => sum + a.balance, 0);
+  const formatNumber = (value) => new Intl.NumberFormat('ar-SA').format(Number(value) || 0);
+
+  const metrics = useMemo(() => {
+    const mainFund = funds.find((fund) => fund.is_main);
+    const totalAgenciesBalance = subAgencies.reduce((sum, agency) => sum + (Number(agency.balance) || 0), 0);
+
+    return {
+      mainFundBalance: Number(mainFund?.balance) || 0,
+      totalAgenciesBalance,
+      agenciesCount: subAgencies.length,
+      netProfit: Number(dashboardSummary?.net_profit) || 0,
+      totalExpenses: Number(dashboardSummary?.total_expenses) || 0,
+      shippingQuantity: Number(dashboardSummary?.shipping_quantity) || 0,
+    };
+  }, [dashboardSummary, funds, subAgencies]);
+
+  const quickLinks = [
+    { label: 'الوكالات الفرعية', to: '/sub-agencies' },
+    { label: 'الصناديق', to: '/funds' },
+    { label: 'شركات التحويل', to: '/transfer-companies' },
+    { label: 'الديون', to: '/debts' },
+  ];
 
   return (
-    <div className="space-y-6" data-testid="main-agency-page">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">الوكالة الرئيسية</h1>
-        <p className="text-slate-500 mt-1">نظرة شاملة على الوكالة الرئيسية</p>
-      </div>
+    <div className="space-y-6" dir="rtl" data-testid="main-agency-page">
+      <section className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900">الوكالة الرئيسية</h1>
+            <p className="mt-1 text-sm text-slate-500">لوحة قيادة تجمع مؤشرات الإدارة الرئيسية مع اختصارات للأقسام الحيوية.</p>
+          </div>
 
-      {/* Main Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="card p-5">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-primary-100 rounded-2xl flex items-center justify-center">
-              <Building2 className="w-7 h-7 text-primary-600" />
-            </div>
-            <div>
-              <p className="text-sm text-slate-500">الوكالة الرئيسية</p>
-              <p className="text-lg font-bold text-slate-900">LorkERP</p>
-            </div>
+          <div className="flex flex-wrap gap-2">
+            {quickLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="inline-flex items-center gap-1 rounded-xl border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+              >
+                {link.label}
+                <ArrowLeft className="h-4 w-4" />
+              </Link>
+            ))}
           </div>
         </div>
-        
-        <div className="card p-5">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center">
-              <Wallet className="w-7 h-7 text-emerald-600" />
-            </div>
-            <div>
-              <p className="text-sm text-slate-500">رصيد الصندوق الرئيسي</p>
-              <p className="text-xl font-bold text-emerald-600">{formatCurrency(mainFund?.balance || 0)}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="card p-5">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center">
-              <Users className="w-7 h-7 text-amber-600" />
-            </div>
-            <div>
-              <p className="text-sm text-slate-500">الوكالات الفرعية</p>
-              <p className="text-xl font-bold text-slate-900">{subAgencies.length}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div className="card p-5">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center">
-              <TrendingUp className="w-7 h-7 text-blue-600" />
-            </div>
-            <div>
-              <p className="text-sm text-slate-500">إجمالي أرصدة الوكالات</p>
-              <p className="text-xl font-bold text-slate-900">{formatCurrency(totalAgenciesBalance)}</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      </section>
 
-      {/* Financial Overview */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="card">
-          <div className="p-4 border-b border-slate-200">
-            <h3 className="font-semibold text-slate-900">الملخص المالي</h3>
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <article className="rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="mb-2 inline-flex rounded-lg bg-primary-50 p-2 text-primary-700">
+            <Building2 className="h-5 w-5" />
           </div>
-          <div className="p-4 space-y-4">
-            <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-              <div className="flex items-center gap-3">
-                <TrendingUp className="w-5 h-5 text-emerald-600" />
-                <span className="text-slate-600">صافي الربح</span>
-              </div>
-              <span className="font-bold text-emerald-600">{formatCurrency(dashboardSummary?.net_profit || 0)}</span>
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-              <div className="flex items-center gap-3">
-                <TrendingDown className="w-5 h-5 text-red-600" />
-                <span className="text-slate-600">إجمالي المصاريف</span>
-              </div>
-              <span className="font-bold text-red-600">{formatCurrency(dashboardSummary?.total_expenses || 0)}</span>
-            </div>
-            
-            <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-              <div className="flex items-center gap-3">
-                <Package className="w-5 h-5 text-blue-600" />
-                <span className="text-slate-600">رصيد الشحن</span>
-              </div>
-              <span className="font-bold text-slate-900">{dashboardSummary?.shipping_quantity?.toLocaleString('ar-SA') || 0}</span>
-            </div>
-          </div>
-        </div>
+          <p className="text-sm text-slate-500">الجهة الرئيسية</p>
+          <p className="mt-1 text-lg font-bold text-slate-900">LorkERP</p>
+        </article>
 
-        <div className="card">
-          <div className="p-4 border-b border-slate-200">
-            <h3 className="font-semibold text-slate-900">الوكالات الفرعية</h3>
+        <article className="rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="mb-2 inline-flex rounded-lg bg-emerald-50 p-2 text-emerald-700">
+            <Wallet className="h-5 w-5" />
           </div>
-          <div className="p-4">
-            {subAgencies.length === 0 ? (
-              <div className="text-center py-8 text-slate-400">
-                <Users className="w-10 h-10 mx-auto mb-2" />
-                <p>لا توجد وكالات فرعية</p>
+          <p className="text-sm text-slate-500">رصيد الصندوق الرئيسي</p>
+          <p className="mt-1 text-xl font-bold text-slate-900">{formatCurrency(metrics.mainFundBalance)}</p>
+        </article>
+
+        <article className="rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="mb-2 inline-flex rounded-lg bg-amber-50 p-2 text-amber-700">
+            <Users className="h-5 w-5" />
+          </div>
+          <p className="text-sm text-slate-500">عدد الوكالات الفرعية</p>
+          <p className="mt-1 text-2xl font-bold text-slate-900">{formatNumber(metrics.agenciesCount)}</p>
+        </article>
+
+        <article className="rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="mb-2 inline-flex rounded-lg bg-indigo-50 p-2 text-indigo-700">
+            <Receipt className="h-5 w-5" />
+          </div>
+          <p className="text-sm text-slate-500">إجمالي أرصدة الوكالات</p>
+          <p className="mt-1 text-xl font-bold text-slate-900">{formatCurrency(metrics.totalAgenciesBalance)}</p>
+        </article>
+      </section>
+
+      <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <article className="rounded-2xl border border-slate-200 bg-white p-4">
+          <h2 className="mb-3 text-base font-bold text-slate-900">الملخص المالي</h2>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between rounded-xl bg-emerald-50 px-3 py-2.5">
+              <div className="flex items-center gap-2 text-emerald-700">
+                <TrendingUp className="h-4 w-4" />
+                <span className="text-sm font-medium">صافي الربح</span>
               </div>
-            ) : (
-              <div className="space-y-3">
-                {subAgencies.slice(0, 5).map(agency => (
-                  <div key={agency._id} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                    <span className="font-medium text-slate-900">{agency.name}</span>
-                    <span className="font-bold">{formatCurrency(agency.balance)}</span>
+              <span className="font-bold text-emerald-700">{formatCurrency(metrics.netProfit)}</span>
+            </div>
+
+            <div className="flex items-center justify-between rounded-xl bg-rose-50 px-3 py-2.5">
+              <div className="flex items-center gap-2 text-rose-700">
+                <TrendingDown className="h-4 w-4" />
+                <span className="text-sm font-medium">إجمالي المصاريف</span>
+              </div>
+              <span className="font-bold text-rose-700">{formatCurrency(metrics.totalExpenses)}</span>
+            </div>
+
+            <div className="flex items-center justify-between rounded-xl bg-sky-50 px-3 py-2.5">
+              <div className="flex items-center gap-2 text-sky-700">
+                <Package className="h-4 w-4" />
+                <span className="text-sm font-medium">رصيد الشحن (كمية)</span>
+              </div>
+              <span className="font-bold text-sky-700">{formatNumber(metrics.shippingQuantity)}</span>
+            </div>
+          </div>
+        </article>
+
+        <article className="rounded-2xl border border-slate-200 bg-white p-4">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-base font-bold text-slate-900">أعلى الوكالات (حسب الرصيد)</h2>
+            <Link to="/sub-agencies" className="text-xs font-semibold text-primary-700 hover:underline">
+              عرض الكل
+            </Link>
+          </div>
+
+          {subAgencies.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-slate-300 px-4 py-8 text-center text-sm text-slate-500">
+              لا توجد وكالات فرعية حتى الآن.
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {[...subAgencies]
+                .sort((a, b) => (Number(b.balance) || 0) - (Number(a.balance) || 0))
+                .slice(0, 6)
+                .map((agency) => (
+                  <div key={agency._id} className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 px-3 py-2.5">
+                    <span className="text-sm font-medium text-slate-800">{agency.name}</span>
+                    <span className="text-sm font-bold text-slate-900">{formatCurrency(agency.balance)}</span>
                   </div>
                 ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+            </div>
+          )}
+        </article>
+      </section>
     </div>
   );
 };

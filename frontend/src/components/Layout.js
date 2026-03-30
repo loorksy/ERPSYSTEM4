@@ -24,6 +24,7 @@ import {
   TrendingUp,
   DollarSign,
   Briefcase,
+  MonitorSmartphone,
   Settings,
   LogOut,
   Menu,
@@ -86,6 +87,7 @@ const Layout = () => {
         { icon: CreditCard, label: 'دين علينا', path: '/payables-us' },
         { icon: HandCoins, label: 'ديين لنا', path: '/receivables-to-us' },
         { icon: Clock, label: 'مطلوب دفع', path: '/payment-due' },
+        { icon: RefreshCw, label: 'رصيد المؤجل', path: '/deferred-balance' },
         { icon: TrendingUp, label: 'فرق التصريف', path: '/fx-spread' },
       ]
     },
@@ -96,6 +98,12 @@ const Layout = () => {
         { icon: DollarSign, label: 'المصاريف', path: '/expenses-manual' },
         { icon: Coins, label: 'مصادر الربح', path: '/profit-sources' },
         { icon: Briefcase, label: 'وساطة إدارية', path: '/admin-brokerage' },
+      ]
+    },
+    {
+      title: 'التواصل والعملاء',
+      items: [
+        { icon: MonitorSmartphone, label: 'واجهة العملاء', path: '/client-portal' },
       ]
     },
     {
