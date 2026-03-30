@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useData } from '../context/DataContext';
 import { useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Receipt, Plus, X, CreditCard, HandCoins } from 'lucide-react';
 
 const Debts = () => {
@@ -225,6 +226,14 @@ const Debts = () => {
               
               {debt.notes && (
                 <p className="text-sm text-slate-500 mb-4">{debt.notes}</p>
+              )}
+              {(debt.entity_type === 'company' || debt.entity_type === 'fund') && (
+                <Link
+                  to={debt.entity_type === 'company' ? `/debts/company/${debt.entity_id}` : `/debts/fund/${debt.entity_id}`}
+                  className="btn btn-secondary w-full mb-2"
+                >
+                  {debt.entity_type === 'company' ? 'ملف الشركة' : 'ملف الصندوق'}
+                </Link>
               )}
               
               <button

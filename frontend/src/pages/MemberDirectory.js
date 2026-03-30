@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
+import { Link } from 'react-router-dom';
 import { UserCog, Plus, X, Phone, Mail, Briefcase } from 'lucide-react';
 
 const MemberDirectory = () => {
@@ -104,6 +105,9 @@ const MemberDirectory = () => {
                   </div>
                 )}
               </div>
+              <Link to={`/member-directory/member/${member.member_user_id || member._id}`} className="btn btn-secondary w-full mt-3">
+                ملف المستخدم
+              </Link>
             </div>
           ))}
         </div>

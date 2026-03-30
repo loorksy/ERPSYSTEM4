@@ -29,6 +29,7 @@ import ProfitSources from './pages/ProfitSources';
 import DeferredBalance from './pages/DeferredBalance';
 import ClientPortal from './pages/ClientPortal';
 import { SubAgencyProfile, TransferCompanyProfile, FundProfile } from './pages/EntityProfiles';
+import { MemberProfilePage, DebtEntityPage, ProfitSourceDetailPage } from './pages/DetailPages';
 import { PayablesUs, ReceivablesToUs, AdminBrokerage } from './pages/DebtPages';
 
 // Components
@@ -107,6 +108,7 @@ function App() {
             <Route path="search" element={<SearchPage />} />
             <Route path="clients" element={<Clients />} />
             <Route path="member-directory" element={<MemberDirectory />} />
+            <Route path="member-directory/member/:memberUserId" element={<MemberProfilePage />} />
             <Route path="member-adjustments" element={<MemberAdjustments />} />
             <Route path="messages" element={<Messages />} />
             <Route path="approvals" element={<Approvals />} />
@@ -118,6 +120,8 @@ function App() {
             <Route path="funds" element={<Funds />} />
             <Route path="funds/:fundId" element={<FundProfile />} />
             <Route path="debts" element={<Debts />} />
+            <Route path="debts/company/:id" element={<DebtEntityPage entityType="company" />} />
+            <Route path="debts/fund/:id" element={<DebtEntityPage entityType="fund" />} />
             <Route path="payables-us" element={<PayablesUs />} />
             <Route path="receivables-to-us" element={<ReceivablesToUs />} />
             <Route path="payment-due" element={<PaymentDue />} />
@@ -126,6 +130,7 @@ function App() {
             <Route path="shipping" element={<Shipping />} />
             <Route path="expenses-manual" element={<Expenses />} />
             <Route path="profit-sources" element={<ProfitSources />} />
+            <Route path="profit-sources/:sourceType/detail" element={<ProfitSourceDetailPage />} />
             <Route path="admin-brokerage" element={<AdminBrokerage />} />
             <Route path="client-portal" element={<ClientPortal />} />
             <Route path="settings" element={<Settings />} />
