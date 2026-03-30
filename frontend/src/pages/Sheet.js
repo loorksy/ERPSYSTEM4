@@ -228,9 +228,9 @@ const Sheet = () => {
 
       {/* Create/Edit Modal - Tailwind Only */}
       {showModal && (
-        <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center">
+        <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
           
-          <div className="bg-white w-full sm:max-w-2xl sm:mx-4 sm:rounded-2xl rounded-t-3xl max-h-[85vh] flex flex-col shadow-2xl animate-slide-in-up">
+          <div className="bg-white w-full sm:max-w-2xl sm:rounded-2xl rounded-t-3xl max-h-[90vh] sm:max-h-[85vh] flex flex-col shadow-2xl animate-slide-in-up">
             
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-primary-600 to-primary-700 shrink-0 sm:rounded-t-2xl rounded-t-3xl">
@@ -273,30 +273,8 @@ const Sheet = () => {
               </button>
             </div>
 
-            {/* Action Button - في الأعلى */}
-            {!showSavePanel && (
-              <div className="bg-gradient-to-r from-emerald-50 to-emerald-100 px-3 py-2.5 border-b-2 border-emerald-300 shrink-0">
-                <button 
-                  onClick={activeTab === 'google' ? handleFetchFromGoogle : handleUploadFiles} 
-                  className="w-full h-11 flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold text-sm rounded-lg shadow-lg active:scale-[0.98] transition-all"
-                >
-                  {activeTab === 'google' ? (
-                    <>
-                      <Cloud size={18} />
-                      <span>جلب البيانات</span>
-                    </>
-                  ) : (
-                    <>
-                      <Upload size={18} />
-                      <span>تحميل الملفات</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            )}
-
             {/* Body - Scrollable */}
-            <div className="overflow-y-auto overscroll-contain px-3 py-2 space-y-2.5">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-3 py-3 space-y-2.5 min-h-0">
               
               {/* Google Tab */}
               {activeTab === 'google' && (
@@ -456,9 +434,26 @@ const Sheet = () => {
               )}
             </div>
 
-            {/* Save Button - في الأسفل فقط عند showSavePanel */}
-            {showSavePanel && (
-              <div className="bg-white border-t-2 border-slate-300 px-3 py-2.5 shrink-0">
+            {/* Footer - أزرار ثابتة في الأسفل */}
+            <div className="bg-white border-t-2 border-slate-300 px-3 py-2.5 shrink-0">
+              {!showSavePanel ? (
+                <button 
+                  onClick={activeTab === 'google' ? handleFetchFromGoogle : handleUploadFiles} 
+                  className="w-full h-11 flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold text-sm rounded-lg shadow-lg active:scale-[0.98] transition-all"
+                >
+                  {activeTab === 'google' ? (
+                    <>
+                      <Cloud size={18} />
+                      <span>جلب البيانات</span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload size={18} />
+                      <span>تحميل الملفات</span>
+                    </>
+                  )}
+                </button>
+              ) : (
                 <div className="flex gap-2">
                   <button 
                     onClick={closeModal} 
@@ -474,8 +469,8 @@ const Sheet = () => {
                     <span>حفظ</span>
                   </button>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
 
           </div>
         </div>
