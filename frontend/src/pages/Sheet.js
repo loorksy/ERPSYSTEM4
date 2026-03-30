@@ -228,7 +228,7 @@ const Sheet = () => {
 
       {/* Create/Edit Modal - Tailwind Only */}
       {showModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center">
+        <div className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center">
           
           <div className="bg-white w-full sm:max-w-2xl sm:mx-4 sm:rounded-2xl rounded-t-3xl max-h-[85vh] flex flex-col shadow-2xl animate-slide-in-up">
             
@@ -483,7 +483,7 @@ const Sheet = () => {
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && closeDeleteConfirm()}>
+        <div className="modal-overlay z-[9999]" onClick={(e) => e.target === e.currentTarget && closeDeleteConfirm()}>
           <div className="modal-content w-full max-w-md mx-4 p-6">
             <div className="text-center mb-6">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center">
