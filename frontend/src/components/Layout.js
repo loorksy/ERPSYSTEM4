@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useData } from '../context/DataContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import QuickActionHub from './QuickActionHub';
 import {
   LayoutDashboard,
   FileSpreadsheet,
@@ -29,11 +30,7 @@ import {
   LogOut,
   Menu,
   X,
-  ChevronDown,
   Plus,
-  Send,
-  ArrowDownCircle,
-  ArrowUpCircle,
   Package,
   Coins,
   BarChart3,
@@ -43,7 +40,7 @@ import {
 
 const Layout = () => {
   const { user, logout } = useAuth();
-  const { activeCycle, cycles } = useData();
+  const { activeCycle } = useData();
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -112,24 +109,6 @@ const Layout = () => {
         { icon: Settings, label: 'الإعدادات', path: '/settings' },
       ]
     }
-  ];
-
-  const fabOutActions = [
-    { icon: Package, label: 'شحن', action: () => navigate('/shipping?fab=out') },
-    { icon: Building, label: 'وكالة فرعية', action: () => navigate('/sub-agencies?action=bonus') },
-    { icon: Truck, label: 'شركة تحويل', action: () => navigate('/transfer-companies?action=disburse') },
-    { icon: Wallet, label: 'صندوق', action: () => navigate('/funds?action=transfer') },
-    { icon: DollarSign, label: 'مصروف', action: () => navigate('/expenses-manual?action=add') },
-    { icon: Clock, label: 'مطلوب دفع', action: () => navigate('/payment-due') },
-  ];
-
-  const fabInActions = [
-    { icon: Package, label: 'شحن + تبديل راتب', action: () => navigate('/shipping?fab=in&qaFocus=swap') },
-    { icon: Receipt, label: 'دين', action: () => navigate('/debts?action=add') },
-    { icon: CheckCircle, label: 'اعتماد', action: () => navigate('/approvals?action=add') },
-    { icon: TrendingUp, label: 'فرق تصريف', action: () => navigate('/fx-spread?action=add') },
-    { icon: HandCoins, label: 'ديين لنا', action: () => navigate('/receivables-to-us') },
-    { icon: Building, label: 'خصم وكالة', action: () => navigate('/sub-agencies?action=deduct') },
   ];
 
   const handleLogout = async () => {
@@ -300,53 +279,7 @@ const Layout = () => {
               exit={{ opacity: 0, scale: 0.8, y: 20 }}
               className="absolute bottom-16 left-0 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 p-4 z-[61]"
             >
-              <div className="grid grid-cols-2 gap-4">
-                {/* صادر */}
-                <div>
-                  <div className="flex items-center gap-2 mb-3 text-red-600">
-                    <ArrowUpCircle className="w-5 h-5" />
-                    <span className="font-semibold text-sm">صادر</span>
-                  </div>
-                  <div className="space-y-2">
-                    {fabOutActions.map((action, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => {
-                          setFabOpen(false);
-                          action.action();
-                        }}
-                        className="w-full flex items-center gap-2 p-2 rounded-lg text-sm text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors"
-                      >
-                        <action.icon className="w-4 h-4" />
-                        {action.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* وارد */}
-                <div>
-                  <div className="flex items-center gap-2 mb-3 text-emerald-600">
-                    <ArrowDownCircle className="w-5 h-5" />
-                    <span className="font-semibold text-sm">وارد</span>
-                  </div>
-                  <div className="space-y-2">
-                    {fabInActions.map((action, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => {
-                          setFabOpen(false);
-                          action.action();
-                        }}
-                        className="w-full flex items-center gap-2 p-2 rounded-lg text-sm text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
-                      >
-                        <action.icon className="w-4 h-4" />
-                        {action.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <QuickActionHub compact onActionComplete={() => setFabOpen(false)} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -390,53 +323,7 @@ const Layout = () => {
               className="relative z-[71] w-[90%] max-w-sm bg-white rounded-2xl shadow-2xl p-5"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="grid grid-cols-2 gap-4">
-                {/* صادر */}
-                <div>
-                  <div className="flex items-center gap-2 mb-3 text-red-600">
-                    <ArrowUpCircle className="w-5 h-5" />
-                    <span className="font-semibold text-sm">صادر</span>
-                  </div>
-                  <div className="space-y-2">
-                    {fabOutActions.map((action, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => {
-                          setFabOpen(false);
-                          action.action();
-                        }}
-                        className="w-full flex items-center gap-2 p-3 rounded-lg text-sm text-slate-600 hover:bg-red-50 hover:text-red-700 transition-colors"
-                      >
-                        <action.icon className="w-5 h-5" />
-                        {action.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* وارد */}
-                <div>
-                  <div className="flex items-center gap-2 mb-3 text-emerald-600">
-                    <ArrowDownCircle className="w-5 h-5" />
-                    <span className="font-semibold text-sm">وارد</span>
-                  </div>
-                  <div className="space-y-2">
-                    {fabInActions.map((action, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => {
-                          setFabOpen(false);
-                          action.action();
-                        }}
-                        className="w-full flex items-center gap-2 p-3 rounded-lg text-sm text-slate-600 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
-                      >
-                        <action.icon className="w-5 h-5" />
-                        {action.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <QuickActionHub onActionComplete={() => setFabOpen(false)} />
             </motion.div>
           </div>
         )}
