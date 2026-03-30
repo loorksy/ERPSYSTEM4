@@ -169,18 +169,21 @@ const Approvals = () => {
             <p className="text-sm text-slate-500 mt-0.5">إدارة المعتمدين، رفع الأرصدة، وتسليم العمليات</p>
           </div>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <button onClick={() => setShowBulkModal(true)} className="btn btn-secondary">
-            <Upload size={18} />
-            <span>رفع أرصدة</span>
+        <div className="flex gap-2">
+          <button onClick={() => setShowBulkModal(true)} className="btn btn-secondary text-xs sm:text-sm px-2.5 py-2 sm:px-4 sm:py-2.5">
+            <Upload size={16} className="sm:ml-1" />
+            <span className="hidden sm:inline">رفع أرصدة</span>
+            <span className="sm:hidden">رفع</span>
           </button>
-          <button onClick={() => setShowDeliveryModal(true)} className="btn btn-success">
-            <HandCoins size={18} />
-            <span>تسليم</span>
+          <button onClick={() => setShowDeliveryModal(true)} className="btn btn-success text-xs sm:text-sm px-2.5 py-2 sm:px-4 sm:py-2.5">
+            <HandCoins size={16} className="sm:ml-1" />
+            <span className="hidden sm:inline">تسليم</span>
+            <span className="sm:hidden">تسليم</span>
           </button>
-          <button onClick={() => setShowAddModal(true)} className="btn btn-primary">
-            <Plus size={18} />
-            <span>إضافة معتمد</span>
+          <button onClick={() => setShowAddModal(true)} className="btn btn-primary text-xs sm:text-sm px-2.5 py-2 sm:px-4 sm:py-2.5">
+            <Plus size={16} className="sm:ml-1" />
+            <span className="hidden sm:inline">إضافة معتمد</span>
+            <span className="sm:hidden">إضافة</span>
           </button>
         </div>
       </div>
