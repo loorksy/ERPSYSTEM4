@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useData } from '../context/DataContext';
+import { useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Wallet, Plus, ArrowUpCircle, ArrowDownCircle, X, History } from 'lucide-react';
 
 const Funds = () => {
+  const [searchParams] = useSearchParams();
   const { funds, activeCycle, createFund, fundTransaction, api } = useData();
   const [showModal, setShowModal] = useState(false);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
@@ -51,11 +54,17 @@ const Funds = () => {
     setSelectedFund(null);
   };
 
-  const openTransactionModal = (fund, type) => {
+  const openTransactionModal = useCallback((fund, type) => {
     setSelectedFund(fund);
     setTransactionForm({ ...transactionForm, transaction_type: type });
     setShowTransactionModal(true);
-  };
+  }, [transactionForm]);
+
+  React.useEffect(() => {
+    if (searchParams.get('action') !== 'transfer' || funds.length === 0) return;
+    const targetFund = funds.find((fund) => !fund.is_main) || funds[0];
+    if (targetFund) openTransactionModal(targetFund, 'deposit');
+  }, [searchParams, funds, openTransactionModal]);
 
   const viewHistory = async (fund) => {
     try {
@@ -160,6 +169,10 @@ const Funds = () => {
                   <History className="w-4 h-4" />
                 </button>
               </div>
+              <Link to={`/funds/${fund._id}`} className="btn btn-secondary w-full mt-2 text-sm">
+                <Wallet className="w-4 h-4" />
+                ملف الصندوق
+              </Link>
             </div>
           ))}
         </div>

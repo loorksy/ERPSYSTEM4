@@ -24,6 +24,7 @@ import {
   TrendingUp,
   DollarSign,
   Briefcase,
+  MonitorSmartphone,
   Settings,
   LogOut,
   Menu,
@@ -86,6 +87,7 @@ const Layout = () => {
         { icon: CreditCard, label: 'دين علينا', path: '/payables-us' },
         { icon: HandCoins, label: 'ديين لنا', path: '/receivables-to-us' },
         { icon: Clock, label: 'مطلوب دفع', path: '/payment-due' },
+        { icon: RefreshCw, label: 'رصيد المؤجل', path: '/deferred-balance' },
         { icon: TrendingUp, label: 'فرق التصريف', path: '/fx-spread' },
       ]
     },
@@ -99,6 +101,12 @@ const Layout = () => {
       ]
     },
     {
+      title: 'التواصل والعملاء',
+      items: [
+        { icon: MonitorSmartphone, label: 'واجهة العملاء', path: '/client-portal' },
+      ]
+    },
+    {
       title: 'النظام',
       items: [
         { icon: Settings, label: 'الإعدادات', path: '/settings' },
@@ -107,7 +115,7 @@ const Layout = () => {
   ];
 
   const fabOutActions = [
-    { icon: Package, label: 'شحن', action: () => navigate('/shipping?type=out') },
+    { icon: Package, label: 'شحن', action: () => navigate('/shipping?fab=out') },
     { icon: Building, label: 'وكالة فرعية', action: () => navigate('/sub-agencies?action=bonus') },
     { icon: Truck, label: 'شركة تحويل', action: () => navigate('/transfer-companies?action=disburse') },
     { icon: Wallet, label: 'صندوق', action: () => navigate('/funds?action=transfer') },
@@ -116,7 +124,7 @@ const Layout = () => {
   ];
 
   const fabInActions = [
-    { icon: Package, label: 'شحن + تبديل راتب', action: () => navigate('/shipping?type=in') },
+    { icon: Package, label: 'شحن + تبديل راتب', action: () => navigate('/shipping?fab=in&qaFocus=swap') },
     { icon: Receipt, label: 'دين', action: () => navigate('/debts?action=add') },
     { icon: CheckCircle, label: 'اعتماد', action: () => navigate('/approvals?action=add') },
     { icon: TrendingUp, label: 'فرق تصريف', action: () => navigate('/fx-spread?action=add') },
