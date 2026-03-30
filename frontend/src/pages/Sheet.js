@@ -273,6 +273,28 @@ const Sheet = () => {
               </button>
             </div>
 
+            {/* Action Button - في الأعلى */}
+            {!showSavePanel && (
+              <div className="bg-gradient-to-r from-emerald-50 to-emerald-100 px-3 py-2.5 border-b-2 border-emerald-300 shrink-0">
+                <button 
+                  onClick={activeTab === 'google' ? handleFetchFromGoogle : handleUploadFiles} 
+                  className="w-full h-11 flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold text-sm rounded-lg shadow-lg active:scale-[0.98] transition-all"
+                >
+                  {activeTab === 'google' ? (
+                    <>
+                      <Cloud size={18} />
+                      <span>جلب البيانات</span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload size={18} />
+                      <span>تحميل الملفات</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
+
             {/* Body - Scrollable */}
             <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-2 space-y-2.5">
               
@@ -434,43 +456,26 @@ const Sheet = () => {
               )}
             </div>
 
-            {/* Footer - Fixed Button */}
-            <div className="bg-white border-t-4 border-emerald-400 px-3 py-2.5 shrink-0">
-              {!showSavePanel ? (
-                <button 
-                  onClick={activeTab === 'google' ? handleFetchFromGoogle : handleUploadFiles} 
-                  className="w-full h-12 flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-500 hover:from-emerald-600 hover:to-emerald-600 text-white font-black text-sm rounded-xl shadow-2xl active:scale-[0.97] transition-all border-2 border-emerald-700"
-                >
-                  {activeTab === 'google' ? (
-                    <>
-                      <Cloud size={20} strokeWidth={2.5} />
-                      <span>جلب البيانات من Google</span>
-                    </>
-                  ) : (
-                    <>
-                      <Upload size={20} strokeWidth={2.5} />
-                      <span>تحميل الملفات</span>
-                    </>
-                  )}
-                </button>
-              ) : (
+            {/* Save Button - في الأسفل فقط عند showSavePanel */}
+            {showSavePanel && (
+              <div className="bg-white border-t-2 border-slate-300 px-3 py-2.5 shrink-0">
                 <div className="flex gap-2">
                   <button 
                     onClick={closeModal} 
-                    className="flex-1 h-12 flex items-center justify-center bg-slate-300 hover:bg-slate-400 text-slate-800 font-black text-sm rounded-xl transition-all border-2 border-slate-400"
+                    className="flex-1 h-11 flex items-center justify-center bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm rounded-lg transition-all"
                   >
                     إلغاء
                   </button>
                   <button 
                     onClick={handleSaveCycle} 
-                    className="flex-1 h-12 flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 via-primary-600 to-primary-500 hover:from-primary-600 hover:to-primary-600 text-white font-black text-sm rounded-xl shadow-2xl active:scale-[0.97] transition-all border-2 border-primary-700"
+                    className="flex-1 h-11 flex items-center justify-center gap-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-bold text-sm rounded-lg shadow-lg active:scale-[0.98] transition-all"
                   >
-                    <FileSpreadsheet size={18} strokeWidth={2.5} />
-                    <span>حفظ الدورة</span>
+                    <FileSpreadsheet size={18} />
+                    <span>حفظ</span>
                   </button>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
 
           </div>
         </div>
