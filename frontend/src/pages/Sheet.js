@@ -230,7 +230,7 @@ const Sheet = () => {
       {showModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center">
           
-          <div className="bg-white w-full sm:max-w-2xl sm:mx-4 sm:rounded-2xl rounded-t-3xl h-[80vh] sm:max-h-[90vh] flex flex-col shadow-2xl animate-slide-in-up">
+          <div className="bg-white w-full sm:max-w-2xl sm:mx-4 sm:rounded-2xl rounded-t-3xl max-h-[85vh] flex flex-col shadow-2xl animate-slide-in-up">
             
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-primary-600 to-primary-700 shrink-0 sm:rounded-t-2xl rounded-t-3xl">
@@ -296,7 +296,7 @@ const Sheet = () => {
             )}
 
             {/* Body - Scrollable */}
-            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-3 py-2 space-y-2.5">
+            <div className="overflow-y-auto overscroll-contain px-3 py-2 space-y-2.5">
               
               {/* Google Tab */}
               {activeTab === 'google' && (
